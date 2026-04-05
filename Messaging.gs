@@ -23,21 +23,42 @@ function sendLineBroadcast() {
     deadline.setHours(23, 59, 59);
   }
 
-  const deliveryContent = getBroadcastContent();
-  if (!deliveryContent.success) {
-    console.log("配信内容が見当たらないため, スキップしました。");
+  // 1. まずアーカイブを実行（もし5:00に実行済みなら空が返る）
+  const archiveData = archiveTargetData(deadline);
+  
+  // 2. もしアーカイブが空なら、すでにアーカイブ済みの「本日の配信分」を探す
+  let targetData = archiveData;
+  if (targetData.length === 0) {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName((today.getMonth() + 1) + "月");
+    if (sheet) {
+      const values = sheet.getDataRange().getValues();
+      // J列（インデックス9）が「今日」のデータを抽出
+      targetData = values.slice(1).filter(row => {
+        const d = row[9];
+        return d instanceof Date && 
+               d.getFullYear() === today.getFullYear() && 
+               d.getMonth() === today.getMonth() && 
+               d.getDate() === today.getDate();
+      });
+    }
+  }
+
+  if (targetData.length === 0) {
+    console.log("本日の配信対象データが見当たらないため、スキップしました。");
     return;
   }
 
-  const archiveData = archiveTargetData(deadline);
+  const deliveryContent = getBroadcastContent();
+  if (!deliveryContent.success) {
+    console.log("配信テキストが見当たらないため、スキップしました。");
+    return;
+  }
   
   const messages = [];
-  // 1. 画像があれば先に入れる
   if (deliveryContent.imageUrl) {
-    console.log("一斉配信する画像URL: " + deliveryContent.imageUrl);
     messages.push({ "type": "image", "originalContentUrl": deliveryContent.imageUrl, "previewImageUrl": deliveryContent.imageUrl });
   }
-  // 2. 次にテキストを入れる
   messages.push({ "type": "text", "text": deliveryContent.text });
 
   const url = "https://api.line.me/v2/bot/message/broadcast";
@@ -49,6 +70,9 @@ function sendLineBroadcast() {
 
   const response = UrlFetchApp.fetch(url, options);
   console.log("LINE 一斉配信完了: " + response.getContentText());
+
+  // ダッシュボードへの記録
+  logBroadcastToDashboard(targetData);
 }
 
 /**
