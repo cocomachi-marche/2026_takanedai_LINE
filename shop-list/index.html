@@ -104,8 +104,12 @@
       filtered.forEach(shop => {
         const isNewStore = isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
         const id = shop["店舗ID"], name = shop["店名"] || "", title = shop["紹介タイトル"] || "", intro = shop["スマホ紹介文"] || "";
-        const shopIdMap = { "369":"369","mnm":"mnm","cko":"cko","yud":"ydk","akh":"akh","fnt":"fnt","khe":"khe","knr":"knr","lpc":"lpc","mld":"mld","mypl":"mypl","npi":"npi","oyk":"oyk","pal":"pal","szk":"szk","tmp":"tmp","uchu":"uchu","usk":"usk","yknr":"yknr" };
-        const imgSrc = shop["メイン写真"] || `images/shops/${shopIdMap[id]||id}/main.jpg`;
+        const shopImageMap = {
+          "369": "369/hero.jpeg", "mnm": "mnm/nain.png", "cko": "cko/main.jpeg", "oyk": "oyk/main.png", "akh": "akh/main.png",
+          "lpc": "lpc/main.jpeg", "usk": "usk/main.JPG", "uchu": "uchu/main.jpeg", "fnt": "fnt/main.PNG", "khe": "khe/main.png",
+          "ust": "ust/main.png", "yud": "ydk/main.jpg", "yknr": "yknr/main.jpg"
+        };
+        const imgSrc = shop["メイン写真"] || `images/shops/${shopImageMap[id] || (id + "/main.jpg")}`;
 
         const card = document.createElement('a');
         card.href = `./${id}.html`; card.className = "card";
