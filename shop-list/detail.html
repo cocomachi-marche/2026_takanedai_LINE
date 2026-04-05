@@ -31,7 +31,7 @@
       box-shadow: 0 0 20px rgba(0,0,0,0.05);
     }
 
-    /* 画像レイアウト */
+    /* 画像レイアウト：最上部 */
     .hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -45,6 +45,37 @@
       object-fit: cover;
       border-radius: 24px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* 中段：メイン写真（今回のおすすめ） */
+    .mid-hero {
+      margin: 32px 0;
+      text-align: center;
+    }
+
+    .mid-hero img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 36px;
+      border: 3px solid #fbd38d;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    /* 下部：追加写真（2枚並び） */
+    .sub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .sub-grid img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid #ffd8a8;
     }
 
     /* 店名・タイトル */
@@ -74,13 +105,6 @@
       font-size: 18px;
       font-weight: 800;
       line-height: 1.4;
-    }
-
-    .h2-subtitle {
-      font-size: 14px;
-      color: #666;
-      font-weight: 600;
-      margin-top: 4px;
     }
 
     /* 説明文 */
@@ -196,36 +220,41 @@
       const description = shop["詳細本文"] || shop["introShort"] || "";
       const tags = (shop["tags"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
 
-      // 画像の取得 (優先順位: 1.投稿原本のURL, 2.ローカル固定パス)
-      const folder = shop["店舗ID"];
-      const getImg = (val, def) => val || `../images/shops/${folder}/${def}`;
+      // 画像の取得
+      const id = shop["店舗ID"];
+      const getFixedImg = (def) => `../images/shops/${id}/${def}`;
       
-      const img1 = getImg(shop["メイン写真"], "main.png");
-      const img2 = getImg(shop["追加写真1"], "sub.png");
-      const img3 = getImg(shop["追加写真1"], "sub.png"); // 中段1
-      const img4 = getImg(shop["追加写真2"], "sub2.png"); // 中段2
+      const atmosphere1 = getFixedImg("main.png"); // 固定イメージ1
+      const atmosphere2 = getFixedImg("sub.png");  // 固定イメージ2
+      const mainImg = shop["メイン写真"];      // 今回のメイン投稿 (G列)
+      const subImg1 = shop["追加写真1"];      // 今回の追加投稿1 (H列)
+      const subImg2 = shop["追加写真2"];      // 今回の追加投稿2 (I列)
 
       document.getElementById('app').innerHTML = `
-        <!-- 上部メイン2枚 -->
+        <!-- 第1段：最上部（店舗雰囲気写真） -->
         <div class="hero-grid">
-          <img src="${img1}" onerror="this.src='https://placehold.co/400x400?text=Main'">
-          <img src="${img2}" onerror="this.src='https://placehold.co/400x400?text=Sub'">
+          <img src="${atmosphere1}" onerror="this.src='https://placehold.co/400x400?text=Atmosphere1'">
+          <img src="${atmosphere2}" onerror="this.src='https://placehold.co/400x400?text=Atmosphere2'">
         </div>
 
         <div class="shop-head">
           <h1 class="shop-name">${name}</h1>
           <div class="capsule-title">
             <div class="h1-title">${title}</div>
-            <!-- h2サブタイトルが必要な場合はここに追加 -->
           </div>
         </div>
 
         <div class="description">${description}</div>
 
-        <!-- 中段追加写真2枚 -->
-        <div class="hero-grid">
-          <img src="${img3}" onerror="this.style.display='none'">
-          <img src="${img4}" onerror="this.style.display='none'">
+        <!-- 第2段：中段（最新のメイン投稿写真） -->
+        <div class="mid-hero">
+          ${mainImg ? `<img src="${mainImg}" onerror="this.style.display='none'">` : ""}
+        </div>
+
+        <!-- 第3段：下部（最新の追加投稿写真） -->
+        <div class="sub-grid">
+          ${subImg1 ? `<img src="${subImg1}" onerror="this.style.display='none'">` : ""}
+          ${subImg2 ? `<img src="${subImg2}" onerror="this.style.display='none'">` : ""}
         </div>
 
         <!-- 基本情報リスト -->

@@ -7,7 +7,7 @@ const SS_ID = "1kdSyafGgFiPUuJW1LpObMlQ6CEWVH9BSqodhscqospo";
 const FOLDER_ID = "1djDPnT1caz3Lji0-YpKgQ_3CdIpFdBWA"; // ヒデさん指定のフォルダ
 
 /**
- * 既存の店舗固定データ (HTMLから抽出)
+ * 既存の店舗固定データ
  */
 const FIXED_DATA = {
   "369": { address: "千葉県船橋市高根台1-8-2", hours: "11:00〜14:30、18:00〜23:00", holiday: "月曜日、木曜日、不定休", phone: "047-407-1369", hp: "https://yoshokudobar369.owst.jp/", sns: "https://www.instagram.com/yoshokudobar_369/", tags: "#飲食,#ランチ,#ディナー,#お酒,#バル,#レストラン,#お食事,#日本酒" },
@@ -15,7 +15,7 @@ const FIXED_DATA = {
   "szk": { address: "千葉県船橋市芝山2-8-1", hours: "9:00〜18:00", holiday: "第2第4月曜日、年末年始", phone: "047-463-2101", hp: "https://suzuki-auto-keiyo.jp/", sns: "https://www.instagram.com/suzuki_auto_keiyo", tags: "#車,#整備,#地域密着" },
   "knr": { address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#バインミー,#アサイーボウル,#コーヒー,#カフェ,#耳ツボジュエリー" },
   "oyk": { address: "千葉県船橋市大穴南1-40-12", hours: "12:00~15:00、17:00~22:00", holiday: "火曜日", phone: "047-404-3820", hp: "-", sns: "https://www.instagram.com/okonomiyaki_kin.iro", tags: "#飲食,#お好み焼き,#滝不動,#昼飲み,#自家製出汁" },
-  "tmp": { address: "船橋市七林町114-61", hours: "14時〜20時", holiday: "-", phone: "090-3067-5899", hp: "https://www.miho-piano.site/", sns: "https://www.facebook.com/田中美穂ピアノ教室-100051468146037/", tags: "#教育,#ピアノ,#ピアノ教室,#ヴァイオリン" },
+  "tmp": { address: "船橋市七林町114-61", hours: "14時〜20時", holiday: "-", phone: "090-3067-5899", hp: "https://www.miho-piano.site/", sns: "https://www.facebook.com/田中美穂ピアノ教室", tags: "#教育,#ピアノ,#ヴァイオリン" },
   "yknr": { address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#眼精疲労,#ダイエット,#肩こり腰痛,#リフトアップ,#健康,#美容,#耳ツボジュエリー" },
   "mypl": { address: "船橋市西船4-19-3 西船成島ビル8階", hours: "9:00～18:00", holiday: "土曜日、日曜日、祝日", phone: "047-495-0521", hp: "https://funabashi.mypl.net/", sns: "https://www.instagram.com/mypl_funabashi/", tags: "#メディア,#広告,#地域情報" },
   "mld": { address: "-", hours: "5:00〜22:00", holiday: "-", phone: "090-4606-3061", hp: "https://www.mmihodesign.com/", sns: "https://www.instagram.com/funabashi_designmlabo", tags: "#クリエイティブ,#SNS,#デザイン" },
@@ -37,9 +37,9 @@ const FIXED_DATA = {
 function doGet(e) {
   const type = e.parameter.type || "list";
   const ss = SpreadsheetApp.openById(SS_ID);
-  const sheet = ss.getSheetByName("投稿原本"); // シート名を「投稿原本」に修正
+  const sheet = ss.getSheetByName("投稿原本");
   const allValues = sheet.getDataRange().getValues();
-  // 5行目以降にデータがない場合は空配列を返す
+  
   if (allValues.length < 5) return ContentService.createTextOutput("[]").setMimeType(ContentService.MimeType.JSON);
 
   const headers = allValues[3]; // 4行目（インデックス3）をヘッダーとする
@@ -59,7 +59,6 @@ function doGet(e) {
   data.forEach(item => {
     const id = item["店舗ID"];
     if (!id) return;
-    // A列がタイムスタンプに変更されたため、それに基づいてマージ
     if (!mergedData[id] || new Date(item["タイムスタンプ"]) > new Date(mergedData[id]["タイムスタンプ"])) {
       mergedData[id] = item;
     }
@@ -88,9 +87,9 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SS_ID);
-    const sheet = ss.getSheetByName("投稿原本"); // シート名を「投稿原本」に修正
+    const sheet = ss.getSheetByName("投稿原本");
     
-    // 画像の保存とURL取得 (Drive直リンク化)
+    // 画像の保存とURL取得
     const imageUrls = [];
     if (data.images && data.images.length > 0) {
       const folder = DriveApp.getFolderById(FOLDER_ID);
@@ -105,7 +104,7 @@ function doPost(e) {
       });
     }
 
-    // スプレッドシートへの記録 (A:タイムスタンプ, B:店舗ID ... )
+    // スプレッドシートへの記録 (最新のリスト通り：A〜Iの9項目)
     sheet.appendRow([
       new Date(),        // タイムスタンプ (A)
       data.storeId,       // 店舗ID (B)
@@ -123,4 +122,3 @@ function doPost(e) {
     return ContentService.createTextOutput("Error: " + err.message).setMimeType(ContentService.MimeType.TEXT);
   }
 }
-
