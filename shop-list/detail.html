@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>店舗詳細 | ココまちマルシェ</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../images/rogo2.png?v=2" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --content-w: 480px;
+      --mypl-orange: #e67e22;
+      --mypl-bg: #fcfcfc;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      background-color: #f3f4f6;
+      color: #333;
+      margin: 0;
+    }
+
+    .shop-detail {
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+      background: var(--mypl-bg);
+      min-height: 100vh;
+      max-width: var(--content-w);
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    /* 画像レイアウト */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .hero-grid img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* 店名・タイトル */
+    .shop-head {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .shop-name {
+      font-size: 28px;
+      color: var(--mypl-orange);
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .capsule-title {
+      display: inline-block;
+      border: 2px solid #ed8936;
+      border-radius: 50px;
+      padding: 12px 24px;
+      margin-bottom: 8px;
+      background: #fff;
+      max-width: 90%;
+    }
+
+    .h1-title {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .h2-subtitle {
+      font-size: 14px;
+      color: #666;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* 説明文 */
+    .description {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #444;
+      white-space: pre-wrap;
+      margin: 24px 0;
+      padding: 0 8px;
+    }
+
+    /* 基本情報リスト */
+    .info-list {
+      margin: 40px 0;
+      padding: 24px 0;
+      border-top: 1px dotted #ccc;
+    }
+
+    .info-row {
+      display: flex;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .info-label {
+      width: 80px;
+      flex-shrink: 0;
+      color: var(--mypl-orange);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+    }
+
+    .info-label::before {
+      content: '●';
+      font-size: 8px;
+      margin-right: 8px;
+    }
+
+    .info-value {
+      flex-grow: 1;
+      color: #333;
+    }
+
+    .info-value a {
+      color: var(--mypl-orange);
+      text-decoration: underline;
+    }
+
+    /* タグ */
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .pill {
+      background: #fff;
+      border: 1px solid #fed7aa;
+      color: #ed8936;
+      padding: 6px 16px;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-back {
+      display: block;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      padding: 14px;
+      border-radius: 40px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .btn-back:hover { background: #f8fafc; }
+  </style>
+</head>
+
+<body>
+  <main class="shop-detail" id="app">
+    <div style="text-align:center; padding: 100px 0;">読み込み中...</div>
+  </main>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwOFzTzqLfIfvS_kdY0pwA_PYfO5BeQlY4FuV2n3ObeyVB3BMQsPjhswyNu4V9ZNaPyXA/exec";
+
+    async function init() {
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) return;
+
+      try {
+        const res = await fetch(`${API_URL}?type=detail&id=${id}&t=${Date.now()}`);
+        const shop = await res.json();
+        render(shop);
+      } catch (err) {
+        document.getElementById('app').innerHTML = '<div style="text-align:center; color:red; padding:100px 0;">データの取得に失敗しました</div>';
+      }
+    }
+
+    function render(shop) {
+      const name = shop["店名"] || "-";
+      const title = shop["紹介タイトル"] || "";
+      const description = shop["詳細本文"] || shop["introShort"] || "";
+      const tags = (shop["tags"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
+
+      // 画像の取得 (優先順位: 1.投稿原本のURL, 2.ローカル固定パス)
+      const folder = shop["店舗ID"];
+      const getImg = (val, def) => val || `../images/shops/${folder}/${def}`;
+      
+      const img1 = getImg(shop["メイン写真"], "main.png");
+      const img2 = getImg(shop["追加写真1"], "sub.png");
+      const img3 = getImg(shop["追加写真1"], "sub.png"); // 中段1
+      const img4 = getImg(shop["追加写真2"], "sub2.png"); // 中段2
+
+      document.getElementById('app').innerHTML = `
+        <!-- 上部メイン2枚 -->
+        <div class="hero-grid">
+          <img src="${img1}" onerror="this.src='https://placehold.co/400x400?text=Main'">
+          <img src="${img2}" onerror="this.src='https://placehold.co/400x400?text=Sub'">
+        </div>
+
+        <div class="shop-head">
+          <h1 class="shop-name">${name}</h1>
+          <div class="capsule-title">
+            <div class="h1-title">${title}</div>
+            <!-- h2サブタイトルが必要な場合はここに追加 -->
+          </div>
+        </div>
+
+        <div class="description">${description}</div>
+
+        <!-- 中段追加写真2枚 -->
+        <div class="hero-grid">
+          <img src="${img3}" onerror="this.style.display='none'">
+          <img src="${img4}" onerror="this.style.display='none'">
+        </div>
+
+        <!-- 基本情報リスト -->
+        <div class="info-list">
+          <div class="info-row"><div class="info-label">住所</div><div class="info-value">${shop["address"] || "-"}</div></div>
+          <div class="info-row"><div class="info-label">営業時間</div><div class="info-value">${shop["hours"] || "-"}</div></div>
+          <div class="info-row"><div class="info-label">定休日</div><div class="info-value">${shop["holiday"] || "-"}</div></div>
+          <div class="info-row"><div class="info-label">電話</div><div class="info-value">${shop["phone"] !== "-" ? `<a href="tel:${shop["phone"]}">${shop["phone"]}</a>` : "-"}</div></div>
+          <div class="info-row"><div class="info-label">HP</div><div class="info-value">${shop["hp"] !== "-" ? `<a href="${shop["hp"]}" target="_blank">公式ホームページ</a>` : "-"}</div></div>
+          <div class="info-row"><div class="info-label">SNS</div><div class="info-value">${shop["sns"] !== "-" ? `<a href="${shop["sns"]}" target="_blank">SNS（Instagram / FB）</a>` : "-"}</div></div>
+        </div>
+
+        <ul class="pill-list">${tags}</ul>
+
+        <a class="btn-back" href="index.html#catalog">← 一覧へもどる</a>
+      `;
+      document.title = `${name} | ココまちマルシェ`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

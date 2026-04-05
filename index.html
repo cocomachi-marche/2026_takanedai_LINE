@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ココまち投稿フォーム</title>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --dark-gray: #1a1a1a;
+      --text-white: #f5f5f5;
+    }
+    body {
+      background-color: var(--dark-gray);
+      color: var(--text-white);
+      font-family: "Noto Sans JP", sans-serif;
+      margin: 0; padding: 20px;
+    }
+    .container { max-width: 500px; margin: 0 auto; }
+    h1 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 30px; text-align: center; }
+    label { display: block; margin-top: 20px; font-weight: bold; color: var(--gold); }
+    input, textarea {
+      width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #444;
+      background: #333; color: white; box-sizing: border-box;
+    }
+    .photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .photo-slot { background: #333; border: 1px dashed #666; border-radius: 8px; position: relative; aspect-ratio: 1/1; display: grid; place-items: center; cursor: pointer; overflow: hidden; }
+    .photo-slot img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .photo-slot span { font-size: 24px; color: #666; }
+    button {
+      width: 100%; margin-top: 40px; padding: 15px; background: linear-gradient(135deg, #FFD700, #B8860B);
+      color: #000; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s;
+    }
+    button:disabled { background: #555; color: #888; cursor: not-allowed; }
+    #success-screen { display: none; text-align: center; margin-top: 50px; }
+    #success-screen h2 { color: var(--gold); }
+    .footer-btn { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <div class="container" id="form-container">
+    <h1>ココまち投稿フォーム</h1>
+    <form id="submissionForm">
+      <label>◎ あなたの店舗（店舗ID）</label>
+      <select id="storeId" style="width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #444; background: #333; color: white;" required>
+        <option value="">選択してください</option>
+        <option value="369">洋食堂バル369</option>
+        <option value="mnm">はんどめいど みんみ</option>
+        <option value="szk">スズキオート京葉</option>
+        <option value="knr">Cafe Kinari</option>
+        <option value="oyk">お好み焼き きんいろ</option>
+        <option value="tmp">田中美穂ピアノ教室</option>
+        <option value="yknr">耳つぼジュエリー Kinari</option>
+        <option value="mypl">まいぷれ船橋</option>
+        <option value="mld">えむらぼデザイン</option>
+        <option value="akh">旭化成ホームズ</option>
+        <option value="ydk">稀石浴温どこ</option>
+        <option value="lpc">Le Petit Cafe</option>
+        <option value="usk">イラストレーター U-suke</option>
+        <option value="uchu">魚人+</option>
+        <option value="npi">Natural Portrait</option>
+        <option value="fnt">ふなたび</option>
+        <option value="pal">パルシステム千葉</option>
+        <option value="khe">k＊heart</option>
+        <option value="cko">カフェ コッソリ</option>
+      </select>
+
+      <label>◎ 店名（確認用）</label>
+      <input type="text" id="storeName" placeholder="（例）ココまちカフェ" required>
+
+      <label>◎ 配信タイトル（20文字以内）</label>
+      <input type="text" id="title" placeholder="（例）今週の特製ランチ！" maxlength="20" required>
+
+      <label>◎ スマホ用紹介文（短め）</label>
+      <textarea id="introShort" rows="3" placeholder="一覧ページに表示される短い文章です" required></textarea>
+
+      <label>◎ 詳細本文（じっくり詳しく！）</label>
+      <textarea id="description" rows="6" placeholder="店舗詳細ページに掲載されるメインの紹介文です" required></textarea>
+
+      <label>◎ 写真（最大3枚）</label>
+      <div class="photo-grid">
+        <div class="photo-slot" onclick="document.getElementById('file1').click()">
+          <span id="label1">+</span><img id="preview1">
+          <input type="file" id="file1" hidden accept="image/*" onchange="previewImage(this, 1)">
+        </div>
+        <div class="photo-slot" onclick="document.getElementById('file2').click()">
+          <span id="label2">+</span><img id="preview2">
+          <input type="file" id="file2" hidden accept="image/*" onchange="previewImage(this, 2)">
+        </div>
+        <div class="photo-slot" onclick="document.getElementById('file3').click()">
+          <span id="label3">+</span><img id="preview3">
+          <input type="file" id="file3" hidden accept="image/*" onchange="previewImage(this, 3)">
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn">投稿を送信する</button>
+    </form>
+  </div>
+
+  <div class="container" id="success-screen">
+    <h2>送信成功！✨</h2>
+    <p>スプレッドシート（店舗マスタ）への記録が完了しました。<br>サイトに即座に反映されます！</p>
+    <button class="footer-btn" onclick="liff.closeWindow()">画面を閉じる</button>
+  </div>
+
+  <script>
+    const LIFF_ID = "2009632901-2mrGlJeV";
+    // 重要：GASをデプロイした後のURLをここに貼り付けてください
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwOFzTzqLfIfvS_kdY0pwA_PYfO5BeQlY4FuV2n3ObeyVB3BMQsPjhswyNu4V9ZNaPyXA/exec";
+
+    // 画像プレビュー
+    function previewImage(input, index) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('preview' + index).src = e.target.result;
+          document.getElementById('label' + index).style.display = 'none';
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // LIFF初期化
+    liff.init({ liffId: LIFF_ID }).then(() => {
+      if (!liff.isLoggedIn()) { liff.login(); }
+    });
+
+    // フォーム送信
+    document.getElementById('submissionForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerText = "送信中...";
+
+      const getBase64 = (id) => {
+        const file = document.getElementById(id).files[0];
+        if (!file) return null;
+        return new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = (ev) => resolve(ev.target.result);
+          reader.readAsDataURL(file);
+        });
+      };
+
+      const data = {
+        storeId: document.getElementById('storeId').value,
+        storeName: document.getElementById('storeName').value,
+        title: document.getElementById('title').value,
+        introShort: document.getElementById('introShort').value,
+        description: document.getElementById('description').value,
+        images: [
+          await getBase64('file1'),
+          await getBase64('file2'),
+          await getBase64('file3')
+        ].filter(v => v !== null)
+      };
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          body: JSON.stringify(data)
+        });
+        
+        if (res.ok) {
+          document.getElementById('form-container').style.display = 'none';
+          document.getElementById('success-screen').style.display = 'block';
+        } else {
+          alert("送信エラーが発生しました。");
+          btn.disabled = false;
+          btn.innerText = "投稿を送信する";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("通信エラーが発生しました。");
+        btn.disabled = false;
+        btn.innerText = "投稿を送信する";
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>湯どこ | ココまちマルシェ</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="../images/rogo2.png?v=2" type="image/png">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --content-w: 480px;
+            --mypl-orange: #e67e22;
+            --mypl-bg: #fffaf5;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+        }
+
+        .shop-detail {
+            margin: 12px auto 72px;
+            padding: 16px;
+            border-radius: 16px;
+            background: var(--mypl-bg);
+            min-height: auto;
+            max-width: var(--content-w);
+            box-shadow: 0 4px 12px rgba(234, 146, 21, 0.1);
+        }
+
+        .shop-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .shop-hero img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #ffeebb;
+        }
+
+        .shop-head {
+            margin: 8px 0 24px;
+            text-align: center;
+        }
+
+        .shop-name {
+            font-size: clamp(22px, 6vw, 28px);
+            margin: 0;
+            color: var(--mypl-orange);
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+        }
+
+        .shop-catch {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 12px 0 0;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            column-gap: 16px;
+            row-gap: 12px;
+            margin: 24px 0;
+            font-size: 14px;
+            border-top: 1px dashed #ffd8a8;
+            padding-top: 24px;
+        }
+
+        .info dt {
+            color: #d35400;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .info dt::before {
+            content: '●';
+            font-size: 8px;
+            margin-right: 6px;
+        }
+
+        .info dd {
+            margin: 0;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .info a {
+            color: var(--mypl-orange);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .pill {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 24px 0;
+            justify-content: center;
+        }
+
+        .pill li {
+            background: #fff;
+            color: var(--mypl-orange);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #ffd8a8;
+            font-weight: bold;
+        }
+
+        .back {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            min-height: 48px;
+            padding: 0 32px;
+            border-radius: 24px;
+            font-weight: bold;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            color: #555;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #f8f8f8;
+            border-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="shop-detail">
+        <div class="shop-hero"> <img src="images/shops/ydk/main.jpg" alt="メイン画像" loading="lazy"
+                onerror="this.src='https://placehold.co/800x600/orange/white?text=Main+Image'"> <img
+                src="images/shops/ydk/sub.jpg" alt="サブ画像" loading="lazy"
+                onerror="this.src='https://placehold.co/800x600/ffeebb/d35400?text=Sub+Image'"> </div>
+        <div class="shop-head">
+            <h1 class="shop-name">湯どこ</h1>
+            <p class="shop-catch">ラジウム鉱石の岩盤浴で、浴室はラドンミストが充満しており、それを吸うことにより健康と美容を提供します</p>
+        </div>
+        <dl class="info">
+            <dt>住所</dt>
+            <dd>千葉県船橋市南三咲3-15-5</dd>
+            <dt>営業時間</dt>
+            <dd>月〜金10:00〜20:00、土8:00〜20:00、日休8:00〜18:00</dd>
+            <dt>定休日</dt>
+            <dd>年末年始のみ</dd>
+            <dt>電話</dt>
+            <dd><a href="tel:0474949989">047-494-9989</a></dd>
+            <dt>HP</dt>
+            <dd><a href="https://www.ondoko.com" target="_blank" rel="noopener">公式ホームページ</a></dd>
+            <dt>SNS</dt>
+            <dd>-</dd>
+        </dl>
+        <ul class="pill">
+            <li>#岩盤浴</li>
+            <li>#健康</li>
+            <li>#美容</li>
+        </ul>
+        <p class="back"> <a class="btn-back" href="index.html#catalog">← 一覧へもどる</a> </p>
+    </main>
+</body>
+
+</html>
