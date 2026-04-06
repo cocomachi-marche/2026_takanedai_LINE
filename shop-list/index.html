@@ -57,28 +57,28 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzyTldDuVAVMlIHZN98c4AFbVBvmxnf28JRWD3FZcxP2iVv16b2HsKfh-iLp5C0NTnQDw/exec"; 
 
-    let allShops = [];
+    let allShops = [{"店舗ID":"369","店名":"洋食堂バル369","紹介タイトル":"寄り道したくなるお店","スマホ紹介文":"高根公団駅近のアットホームな飲食店","address":"千葉県船橋市高根台1-8-2","hours":"11:00〜14:30、18:00〜23:00","holiday":"月曜日、木曜日、不定休","phone":"047-407-1369","hp":"https://yoshokudobar369.owst.jp/","sns":"https://www.instagram.com/yoshokudobar_369/","tags":"#飲食,#ランチ,#ディナー,#お酒,#バル,#レストラン,#お食事,#日本酒"},{"店舗ID":"mnm","店名":"はんどめいど　みんみ","紹介タイトル":"編みぐるみ販売","スマホ紹介文":"かぎ針編みで制作した編みぐるみ販売","address":"-","hours":"-","holiday":"-","phone":"-","hp":"-","sns":"https://www.instagram.com/handmade_minmi","tags":"#ハンドメイド,#編み物,#編みぐるみ"},{"店舗ID":"szk","店名":"スズキオート京葉株式会社","紹介タイトル":"創業55年地域密着企業","スマホ紹介文":"地域密着の車屋さんです。みんな相談に来てね！","address":"千葉県船橋市芝山2-8-1","hours":"9:00〜18:00","holiday":"第2第4月曜日、年末年始","phone":"047-463-2101","hp":"https://suzuki-auto-keiyo.jp/","sns":"https://www.instagram.com/suzuki_auto_keiyo","tags":"#車,#整備,#地域密着"},{"店舗ID":"knr","店名":"Cafe Kinari","紹介タイトル":"静かなご褒美 食べる 飲む","スマホ紹介文":"心ほどける小さなカフェ","address":"千葉県船橋市高根台6-2-21-2F","hours":"11:00〜16:00","holiday":"水曜日、土曜日","phone":"-","hp":"-","sns":"https://www.instagram.com/cafe_kinari","tags":"#バインミー,#アサイーボウル,#コーヒー,#カフェ,#耳ツボジュエリー"},{"店舗ID":"oyk","店名":"お好み焼き　きんいろ","紹介タイトル":"自家製出汁たっぷり","スマホ紹介文":"たっぷりキャベツのふわっふわお好み焼き","address":"千葉県船橋市大穴南1-40-12","hours":"12:00~15:00、17:00~22:00","holiday":"火曜日","phone":"047-404-3820","hp":"-","sns":"https://www.instagram.com/okonomiyaki_kin.iro","tags":"#飲食,#お好み焼き,#滝不動,#昼飲み,#自家製出汁"},{"店舗ID":"tmp","店名":"田中美穂ピアノ教室","紹介タイトル":"みんな音楽家","スマホ紹介文":"リズム遊びをしながら楽器に触れてみよう","address":"船橋市七林町114-61","hours":"14時〜20時","holiday":"-","phone":"090-3067-5899","hp":"https://www.miho-piano.site/","sns":"https://www.facebook.com/田中美穂ピアノ教室","tags":"#教育,#ピアノ,#ヴァイオリン"},{"店舗ID":"yknr","店名":"耳つぼジュエリー Kinari","紹介タイトル":"ピアス感覚で健康に","スマホ紹介文":"耳つぼに貼るだけで体感できます。","address":"千葉県船橋市高根台6-2-21-2F","hours":"11:00〜16:00","holiday":"水曜日、土曜日","phone":"-","hp":"-","sns":"https://www.instagram.com/cafe_kinari","tags":"#眼精疲労,#ダイエット,#肩こり腰痛,#リフトアップ,#健康,#美容,#耳ツボジュエリー"},{"店舗ID":"mypl","店名":"まいぷれ船橋","紹介タイトル":"地域情報満載","スマホ紹介文":"船橋の今を届ける地域情報サイト","address":"船橋市西船4-19-3 西船成島ビル8階","hours":"9:00～18:00","holiday":"土曜日、日曜日、祝日","phone":"047-495-0521","hp":"https://funabashi.mypl.net/","sns":"https://www.instagram.com/mypl_funabashi/","tags":"#メディア,#広告,#地域情報"},{"店舗ID":"mld","店名":"えむらぼデザイン","紹介タイトル":"想いをカタチに","スマホ紹介文":"船橋の小さなデザイン事務所","address":"-","hours":"5:00〜22:00","holiday":"-","phone":"090-4606-3061","hp":"https://www.mmihodesign.com/","sns":"https://www.instagram.com/funabashi_designmlabo","tags":"#クリエイティブ,#SNS,#デザイン"},{"店舗ID":"akh","店名":"旭化成ホームズ株式会社","紹介タイトル":"長く、共に歩む住まい","スマホ紹介文":"住宅展示場で理想の暮らしを体験","address":"千葉県船橋市本町1-3-1 船橋フェイスビル12階","hours":"9:00～18:00","holiday":"水曜、日曜、祝日","phone":"080-5643-1908","hp":"https://www.asahi-kasei.co.jp/hebel/","sns":"https://www.instagram.com/hebelhaus_official/","tags":"#住宅,#リフォーム,#賃貸経営"},{"店舗ID":"yud","店名":"稀石浴　温どこ","紹介タイトル":"芯から温まる岩盤浴","スマホ紹介文":"心も体もリラックスできる癒しの空間","address":"千葉県船橋市南三咲3-15-5","hours":"10:00〜20:00","holiday":"年末年始","phone":"047-494-9989","hp":"https://www.ondoko.com","sns":"-","tags":"#岩盤浴,#健康,#美容"},{"店舗ID":"lpc","店名":"ル・プチ・カフェ","紹介タイトル":"手作りスイーツとランチ","スマホ紹介文":"心地よい時間が流れる隠れ家カフェ","address":"千葉県船橋市高根台6-8-1","hours":"11:00〜16:30","holiday":"日曜日、月曜日","phone":"047-404-8522","hp":"-","sns":"https://www.instagram.com/lepetitcafe_chiba","tags":"#飲食,#カフェ,#スイーツ,#手作り,#ランチ"},{"店舗ID":"usk","店名":"U-SUKE","紹介タイトル":"心躍るイラストの世界","スマホ紹介文":"絵本やグッズ、ワークショップを展開","address":"東京都","hours":"10時～15時","holiday":"-","phone":"-","hp":"https://u-suke-art.sakura.ne.jp/","sns":"https://www.instagram.com/usuke_works/","tags":"#イラスト,#絵本,#グッズ,#ワークショップ"},{"店舗ID":"uchu","店名":"魚人+","紹介タイトル":"本鮪と炭火焼の店","スマホ紹介文":"美味しいお酒と旬の厳選素材を堪能","address":"千葉県船橋市高根台7-13-16","hours":"17:00～24:00","holiday":"基本日曜日","phone":"047-779-0696","hp":"-","sns":"-","tags":"#飲食,#居酒屋,#本鮪"},{"店舗ID":"npi","店名":"Natural Portrait","紹介タイトル":"わんこと家族の写真撮影","スマホ紹介文":"自然な表情を残す出張撮影サービス","address":"千葉県船橋市","hours":"10:00〜20:00","holiday":"なし","phone":"090-1607-4046","hp":"https://hi-photo.jp/","sns":"https://www.instagram.com/dog.naturalportrait/","tags":"#家族写真,#わんこ,#撮影,#出張"},{"店舗ID":"fnt","店名":"ふなたび","紹介タイトル":"船橋の魅力を再発見","スマホ紹介文":"街の魅力を届ける地域メディア","address":"船橋市","hours":"-","holiday":"年中無休","phone":"090-5829-7010","hp":"https://www.instagram.com/funabashi._.funatabi/","sns":"https://www.instagram.com/funabashi._.funatabi/","tags":"#船橋,#地域メディア"},{"店舗ID":"pal","店名":"パルシステム千葉","紹介タイトル":"安心食材を玄関まで","スマホ紹介文":"暮らしに彩りをつける食材宅配サービス","address":"千葉県","hours":"9:00～20:00","holiday":"日曜日","phone":"0120-868-014","hp":"https://www.palsystem-chiba.coop/","sns":"-","tags":"#宅配,#食品,#雑貨,#ミールキット"},{"店舗ID":"khe","店名":"K＊Heart","紹介タイトル":"アロマと癒しのエステ","スマホ紹介文":"心も体も輝けるパーソナルケア","address":"千葉県船橋市米ヶ﨑町","hours":"10:00〜19:30","holiday":"-","phone":"-","hp":"http://www.k-heart-beauty.com/","sns":"https://www.instagram.com/kheart1118","tags":"#エステ,#アロマ,#癒し"},{"店舗ID":"ust","店名":"Ｕ-studio","紹介タイトル":"初心者歓迎のヨガスタジオ","スマホ紹介文":"呼吸と体、自分を整える穏やかな時間","address":"千葉県船橋市習志野台 2-6-15 2F","hours":"10:00～21:00","holiday":"不定休","phone":"090-5772-3512","hp":"https://www.u-studio.yoga/#top","sns":"https://www.instagram.com/u_studio_ekam_yoga?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==","tags":"#骨盤ヨガ,#リラックスヨガ,#赤ちゃん連れママヨガ,#椅子ヨガ,#パーソナルレッスン"}];
     let currentCategory = "すべて";
 
     async function fetchShops() {
       const container = document.getElementById('shop-container');
       try {
+        // 初期表示を即座に実行
+        renderShops();
+
         console.log("Fetching from:", API_URL);
         const res = await fetch(`${API_URL}?type=list&t=${new Date().getTime()}`);
         if (!res.ok) throw new Error("Network response was not ok");
         
-        allShops = await res.json();
-        console.log("Data received:", allShops);
-
-        if (!Array.isArray(allShops) || allShops.length === 0) {
-          container.innerHTML = '<div class="empty-state">🍀 現在、表示できるショップがありません。<br><small>（データが追加されるまでお待ちください）</small></div>';
-          return;
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          allShops = data;
+          console.log("Data updated from API:", allShops);
+          renderShops();
         }
-
-        renderShops();
       } catch (err) {
         console.error("Fetch error:", err);
-        container.innerHTML = `<div class="empty-state" style="color:#e74c3c;">⚠️ エラーが発生しました<br><small>${err.message}</small><br><br><span style="font-size:12px;color:var(--text);display:block;margin-top:10px;">URLの設定かデプロイ状況を確認してください</span></div>`;
+        // エラーでも初期表示は残す（または必要ならエラー表示）
       }
     }
 
@@ -107,7 +107,7 @@
         const shopImageMap = {
           "369": "369/hero.jpeg", "mnm": "mnm/nain.png", "cko": "cko/main.jpeg", "oyk": "oyk/main.png", "akh": "akh/main.png",
           "lpc": "lpc/main.jpeg", "usk": "usk/main.JPG", "uchu": "uchu/main.jpeg", "fnt": "fnt/main.PNG", "khe": "khe/main.png",
-          "ust": "ust/main.png", "yud": "ydk/main.jpg", "yknr": "yknr/main.jpg"
+          "ust": "ust/main.png", "yud": "yud/main.jpg", "yknr": "yknr/main.jpg"
         };
         const imgSrc = shop["メイン写真"] || `images/shops/${shopImageMap[id] || (id + "/main.jpg")}`;
 
