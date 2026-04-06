@@ -3,7 +3,7 @@
  * 役割：常駐ページを指示された日時（配信サイクル）だけ最新投稿に書き換える
  */
 (function() {
-  const API_URL = "https://script.google.com/macros/s/AKfycbzyTldDuVAVMlIHZN98c4AFbVBvmxnf28JRWD3FZcxP2iVv16b2HsKfh-iLp5C0NTnQDw/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbx0RHc10pEdn7Hj8orrju5Igpe-HLoYvUgZ8m1hzyzUZBDOP-Xqh7PjDyTKtKmioLBaqg/exec";
   const STORE_ID = window.location.pathname.split('/').pop().replace('.html', '');
 
   async function checkUpdate() {

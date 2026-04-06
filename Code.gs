@@ -4,7 +4,7 @@
  */
 
 const SS_ID = "1kdSyafGgFiPUuJW1LpObMlQ6CEWVH9BSqodhscqospo";
-const FOLDER_ID = "1djDPnT1caz3Lji0-YpKgQ_3CdIpFdBWA"; // ヒデさん指定のフォルダ
+const FOLDER_ID = "1Whxg3bzeXV0t0RFIJaXfpagKxTKyoeOP"; // ヒデさん指定のフォルダ
 
 /**
  * 既存の店舗固定データ
