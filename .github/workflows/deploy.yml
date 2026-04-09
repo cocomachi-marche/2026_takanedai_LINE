@@ -1,0 +1,28 @@
+name: Deploy to Xserver
+
+# mainブランチにプッシュされた時に実行する
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v4
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }} # /example.com/public_html/ などのパス
+          # 除外したいファイルがある場合はここに追記（例: .git フォルダなど）
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
