@@ -23,5 +23,5 @@ jobs:
           password: ${{ secrets.SSH_PASSPHRASE }} # このActionでは password という項目名でパスフレーズを受け取ります
           port: ${{ secrets.SSH_PORT }}
           local_path: './*' # ローカルの全ファイルを対象にする
-          remote_path: ${{ secrets.FTP_SERVER_DIR }}
+          remote_path: '/home/hide566566/cocomachi-marche.com/public_html/2026_takanedai_LINE/'
           sftp_only: true # 接続をSFTPに限定する
