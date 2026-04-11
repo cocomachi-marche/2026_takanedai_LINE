@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           server: ${{ secrets.FTP_SERVER }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          password: ${{ secrets.SSH_PASSPHRASE }} # このActionでは password という項目名でパスフレーズを受け取ります
           port: ${{ secrets.SSH_PORT }}
           local_path: './*' # ローカルの全ファイルを対象にする
           remote_path: ${{ secrets.FTP_SERVER_DIR }}
