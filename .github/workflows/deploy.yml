@@ -15,15 +15,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          protocol: ftps # エックスサーバー推奨の暗号化接続（FTPS）を指定
-          # 除外したいファイルがある場合はここに追記（例: .git フォルダなど）
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
+          server: ${{ secrets.FTP_SERVER }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          port: ${{ secrets.SSH_PORT }}
+          local_path: './*' # ローカルの全ファイルを対象にする
+          remote_path: ${{ secrets.FTP_SERVER_DIR }}
+          sftp_only: true # 接続をSFTPに限定する
