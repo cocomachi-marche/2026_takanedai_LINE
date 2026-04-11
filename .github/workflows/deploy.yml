@@ -20,7 +20,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }} # /example.com/public_html/ などのパス
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ftps # エックスサーバー推奨の暗号化接続（FTPS）を指定
           # 除外したいファイルがある場合はここに追記（例: .git フォルダなど）
           exclude: |
             **/.git*
