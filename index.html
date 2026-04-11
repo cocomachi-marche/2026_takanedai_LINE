@@ -1,182 +1,145 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ココまち投稿フォーム</title>
-  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ココまちマルシェ | 高根台エリアのショップリスト</title>
   <style>
     :root {
-      --gold: #D4AF37;
-      --dark-gray: #1a1a1a;
-      --text-white: #f5f5f5;
+      --brand: #e67e22; --surface: #ffffff; --bg: #f8f9fa; --text: #333333; --muted: #666666; --soft: #fff5eb; --radius: 16px; --r-small: 12px; --shadow-1: 0 2px 12px rgba(0, 0, 0, 0.05);
+      --font-main: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     }
-    body {
-      background-color: var(--dark-gray);
-      color: var(--text-white);
-      font-family: "Noto Sans JP", sans-serif;
-      margin: 0; padding: 20px;
-    }
-    .container { max-width: 500px; margin: 0 auto; }
-    h1 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 30px; text-align: center; }
-    label { display: block; margin-top: 20px; font-weight: bold; color: var(--gold); }
-    input, textarea {
-      width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #444;
-      background: #333; color: white; box-sizing: border-box;
-    }
-    .photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 8px; }
-    .photo-slot { background: #333; border: 1px dashed #666; border-radius: 8px; position: relative; aspect-ratio: 1/1; display: grid; place-items: center; cursor: pointer; overflow: hidden; }
-    .photo-slot img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-    .photo-slot span { font-size: 24px; color: #666; }
-    button {
-      width: 100%; margin-top: 40px; padding: 15px; background: linear-gradient(135deg, #FFD700, #B8860B);
-      color: #000; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s;
-    }
-    button:disabled { background: #555; color: #888; cursor: not-allowed; }
-    #success-screen { display: none; text-align: center; margin-top: 50px; }
-    #success-screen h2 { color: var(--gold); }
-    .footer-btn { margin-top: 30px; }
+    body { font-family: var(--font-main); background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
+    .wrap { max-width: 480px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+    .appbar { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 12px 16px; }
+    .appbar .row { display: flex; align-items: center; justify-content: center; }
+    .brand-logo { height: 32px; width: auto; }
+    .hero { padding: 12px 0 24px; text-align: center; }
+    .hero h1 { font-size: 20px; font-weight: 900; margin: 0 0 8px; color: var(--brand); }
+    .hero .sub { font-size: 14px; color: var(--muted); }
+    .chips { display: flex; overflow-x: auto; gap: 8px; padding: 12px 8px; -webkit-overflow-scrolling: touch; margin: 0 -16px; }
+    .chip { flex: 0 0 auto; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(0, 0, 0, .08); background: #fff; box-shadow: var(--shadow-1); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s ease; position: relative; }
+    .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .chip[data-category="NEW"] { border: 1.5px solid #f1c40f; color: #d4ac0d; }
+    .chip[data-category="NEW"].active { background: #f1c40f; color: #000; }
+    .cards { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-1); padding: 12px; display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: center; text-decoration: none; color: inherit; position: relative; overflow: hidden; transition: transform 0.2s; }
+    .card:active { transform: scale(0.98); }
+    .new-ribbon { position: absolute; top: 0; left: 0; background: #f1c40f; color: #000; font-size: 10px; font-weight: 900; padding: 2px 20px; transform: rotate(-45deg) translate(-15px, -8px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10; }
+    .thumb { width: 92px; height: 92px; border-radius: var(--r-small); background: #f4f4f4; overflow: hidden; }
+    .title { font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+    .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--soft); color: var(--brand); border: 1px solid rgba(230, 126, 34, 0.1); }
+    .small { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+    /* エラー・空表示 */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); background: #fff; border-radius: var(--radius); margin-top: 20px; box-shadow: var(--shadow-1); }
   </style>
 </head>
+
 <body>
-  <div class="container" id="form-container">
-    <h1>ココまち投稿フォーム</h1>
-    <form id="submissionForm">
-      <label>◎ あなたの店舗（店舗ID）</label>
-      <select id="storeId" style="width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: 1px solid #444; background: #333; color: white;" required>
-        <option value="">選択してください</option>
-        <option value="369">洋食堂バル369</option>
-        <option value="mnm">はんどめいど みんみ</option>
-        <option value="szk">スズキオート京葉</option>
-        <option value="knr">Cafe Kinari</option>
-        <option value="oyk">お好み焼き きんいろ</option>
-        <option value="tmp">田中美穂ピアノ教室</option>
-        <option value="yknr">耳つぼジュエリー Kinari</option>
-        <option value="mypl">まいぷれ船橋</option>
-        <option value="mld">えむらぼデザイン</option>
-        <option value="akh">旭化成ホームズ</option>
-        <option value="ydk">稀石浴温どこ</option>
-        <option value="lpc">Le Petit Cafe</option>
-        <option value="usk">イラストレーター U-suke</option>
-        <option value="uchu">魚人+</option>
-        <option value="npi">Natural Portrait</option>
-        <option value="fnt">ふなたび</option>
-        <option value="pal">パルシステム千葉</option>
-        <option value="khe">k＊heart</option>
-        <option value="cko">カフェ コッソリ</option>
-      </select>
-
-      <label>◎ 店名（確認用）</label>
-      <input type="text" id="storeName" placeholder="（例）ココまちカフェ" required>
-
-      <label>◎ 配信タイトル（20文字以内）</label>
-      <input type="text" id="title" placeholder="（例）今週の特製ランチ！" maxlength="20" required>
-
-      <label>◎ スマホ用紹介文（短め）</label>
-      <textarea id="introShort" rows="3" placeholder="一覧ページに表示される短い文章です" required></textarea>
-
-      <label>◎ 詳細本文（じっくり詳しく！）</label>
-      <textarea id="description" rows="6" placeholder="店舗詳細ページに掲載されるメインの紹介文です" required></textarea>
-
-      <label>◎ 写真（最大3枚）</label>
-      <div class="photo-grid">
-        <div class="photo-slot" onclick="document.getElementById('file1').click()">
-          <span id="label1">+</span><img id="preview1">
-          <input type="file" id="file1" hidden accept="image/*" onchange="previewImage(this, 1)">
-        </div>
-        <div class="photo-slot" onclick="document.getElementById('file2').click()">
-          <span id="label2">+</span><img id="preview2">
-          <input type="file" id="file2" hidden accept="image/*" onchange="previewImage(this, 2)">
-        </div>
-        <div class="photo-slot" onclick="document.getElementById('file3').click()">
-          <span id="label3">+</span><img id="preview3">
-          <input type="file" id="file3" hidden accept="image/*" onchange="previewImage(this, 3)">
-        </div>
+  <header class="appbar">
+    <div class="row"><img src="shop-list/images/shops/logo.png" alt="ココまちマルシェ" class="brand-logo" onerror="this.src='https://placehold.co/200x80/orange/white?text=Marche+Logo'"></div>
+  </header>
+  <main class="wrap">
+    <section class="hero"><h1>今日の“ちょっと良い”、すぐ見つかる。</h1><p class="sub">近くの人気ショップ情報を、サクッと見つける！</p></section>
+    <section id="catalog">
+      <div class="chips" id="category-chips">
+        <button class="chip active" data-category="すべて">すべて</button>
+        <button class="chip" data-category="NEW">NEW ✨</button>
+        <button class="chip" data-category="食べる 飲む">食べる 飲む</button>
+        <button class="chip" data-category="美容 健康">美容 健康</button>
+        <button class="chip" data-category="ギフト">ギフト</button>
+        <button class="chip" data-category="デリバリー">デリバリー</button>
+        <button class="chip" data-category="学ぶ">学ぶ</button>
+        <button class="chip" data-category="ベビーキッズ歓迎">ベビーキッズ歓迎</button>
+        <button class="chip" data-category="バリアフリー">バリアフリー</button>
+        <button class="chip" data-category="日常生活">日常生活</button>
+        <button class="chip" data-category="お悩み解決">お悩み解決</button>
       </div>
-
-      <button type="submit" id="submitBtn">投稿を送信する</button>
-    </form>
-  </div>
-
-  <div class="container" id="success-screen">
-    <h2>送信成功！✨</h2>
-    <p>スプレッドシート（店舗マスタ）への記録が完了しました。<br>サイトに即座に反映されます！</p>
-    <button class="footer-btn" onclick="liff.closeWindow()">画面を閉じる</button>
-  </div>
+    </section>
+    <section class="cards" id="shop-container"><div class="empty-state">読み込み中...</div></section>
+  </main>
 
   <script>
-    const LIFF_ID = "2009632901-2mrGlJeV";
-    // 重要：GASをデプロイした後のURLをここに貼り付けてください
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbx0RHc10pEdn7Hj8orrju5Igpe-HLoYvUgZ8m1hzyzUZBDOP-Xqh7PjDyTKtKmioLBaqg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx0RHc10pEdn7Hj8orrju5Igpe-HLoYvUgZ8m1hzyzUZBDOP-Xqh7PjDyTKtKmioLBaqg/exec"; 
 
-    // 画像プレビュー
-    function previewImage(input, index) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('preview' + index).src = e.target.result;
-          document.getElementById('label' + index).style.display = 'none';
+    let allShops = [{"店舗ID":"369","店名":"洋食堂バル369","紹介タイトル":"寄り道したくなるお店","スマホ紹介文":"高根公団駅近のアットホームな飲食店","address":"千葉県船橋市高根台1-8-2","hours":"11:00〜14:30、18:00〜23:00","holiday":"月曜日、木曜日、不定休","phone":"047-407-1369","hp":"https://yoshokudobar369.owst.jp/","sns":"https://www.instagram.com/yoshokudobar_369/","tags":"#飲食,#ランチ,#ディナー,#お酒,#バル,#レストラン,#お食事,#日本酒,#食べる 飲む"},{"店舗ID":"mnm","店名":"はんどめいど　みんみ","紹介タイトル":"編みぐるみ販売","スマホ紹介文":"かぎ針編みで制作した編みぐるみ販売","address":"-","hours":"-","holiday":"-","phone":"-","hp":"-","sns":"https://www.instagram.com/handmade_minmi","tags":"#ハンドメイド,#編み物,#編みぐるみ,#日常生活,#ギフト"},{"店舗ID":"szk","店名":"スズキオート京葉株式会社","紹介タイトル":"創業55年地域密着企業","スマホ紹介文":"地域密着の車屋さんです。みんな相談に来てね！","address":"千葉県船橋市芝山2-8-1","hours":"9:00〜18:00","holiday":"第2第4月曜日、年末年始","phone":"047-463-2101","hp":"https://suzuki-auto-keiyo.jp/","sns":"https://www.instagram.com/suzuki_auto_keiyo","tags":"#車,#整備,#地域密着,#日常生活,#お悩み解決"},{"店舗ID":"knr","店名":"Cafe Kinari","紹介タイトル":"静かなご褒美 食べる 飲む","スマホ紹介文":"心ほどける小さなカフェ","address":"千葉県船橋市高根台6-2-21-2F","hours":"11:00〜16:00","holiday":"水曜日、土曜日","phone":"-","hp":"-","sns":"https://www.instagram.com/cafe_kinari","tags":"#バインミー,#アサイーボウル,#コーヒー,#カフェ,#耳ツボジュエリー,#食べる 飲む,#美容 健康"},{"店舗ID":"oyk","店名":"お好み焼き　きんいろ","紹介タイトル":"自家製出汁たっぷり","スマホ紹介文":"たっぷりキャベツのふわっふわお好み焼き","address":"千葉県船橋市大穴南1-40-12","hours":"12:00~15:00、17:00~22:00","holiday":"火曜日","phone":"047-404-3820","hp":"-","sns":"https://www.instagram.com/okonomiyaki_kin.iro","tags":"#飲食,#お好み焼き,#滝不動,#昼飲み,#自家製出汁,#食べる 飲む"},{"店舗ID":"tmp","店名":"田中美穂ピアノ教室","紹介タイトル":"みんな音楽家","スマホ紹介文":"リズム遊びをしながら楽器に触れてみよう","address":"船橋市七林町114-61","hours":"14時〜20時","holiday":"-","phone":"090-3067-5899","hp":"https://www.miho-piano.site/","sns":"https://www.facebook.com/田中美穂ピアノ教室","tags":"#教育,#ピアノ,#ヴァイオリン,#学ぶ,#ベビーキッズ歓迎"},{"店舗ID":"yknr","店名":"耳つぼジュエリー Kinari","紹介タイトル":"ピアス感覚で健康に","スマホ紹介文":"耳つぼに貼るだけで体感できます。","address":"千葉県船橋市高根台6-2-21-2F","hours":"11:00〜16:00","holiday":"水曜日、土曜日","phone":"-","hp":"-","sns":"https://www.instagram.com/cafe_kinari","tags":"#眼精疲労,#ダイエット,#肩こり腰痛,#リフトアップ,#健康,#美容,#耳ツボジュエリー,#美容 健康,#お悩み解決"},{"店舗ID":"mypl","店名":"まいぷれ船橋","紹介タイトル":"地域情報満載","スマホ紹介文":"船橋の今を届ける地域情報サイト","address":"船橋市西船4-19-3 西船成島ビル8階","hours":"9:00～18:00","holiday":"土曜日、日曜日、祝日","phone":"047-495-0521","hp":"https://funabashi.mypl.net/","sns":"https://www.instagram.com/mypl_funabashi/","tags":"#メディア,#広告,#地域情報,#日常生活"},{"店舗ID":"mld","店名":"えむらぼデザイン","紹介タイトル":"想いをカタチに","スマホ紹介文":"船橋の小さなデザイン事務所","address":"-","hours":"5:00〜22:00","holiday":"-","phone":"090-4606-3061","hp":"https://www.mmihodesign.com/","sns":"https://www.instagram.com/funabashi_designmlabo","tags":"#クリエイティブ,#SNS,#デザイン,#お悩み解決"},{"店舗ID":"akh","店名":"旭化成ホームズ株式会社","紹介タイトル":"長く、共に歩む住まい","スマホ紹介文":"住宅展示場で理想の暮らしを体験","address":"千葉県船橋市本町1-3-1 船橋フェイスビル12階","hours":"9:00～18:00","holiday":"水曜、日曜、祝日","phone":"080-5643-1908","hp":"https://www.asahi-kasei.co.jp/hebel/","sns":"https://www.instagram.com/hebelhaus_official/","tags":"#住宅,#リフォーム,#賃貸経営,#お悩み解決,#バリアフリー"},{"店舗ID":"yud","店名":"稀石浴　温どこ","紹介タイトル":"芯から温まる岩盤浴","スマホ紹介文":"心も体もリラックスできる癒しの空間","address":"千葉県船橋市南三咲3-15-5","hours":"10:00〜20:00","holiday":"年末年始","phone":"047-494-9989","hp":"https://www.ondoko.com","sns":"-","tags":"#岩盤浴,#健康,#美容,#美容 健康"},{"店舗ID":"lpc","店名":"ル・プチ・カフェ","紹介タイトル":"手作りスイーツとランチ","スマホ紹介文":"心地よい時間が流れる隠れ家カフェ","address":"千葉県船橋市高根台6-8-1","hours":"11:00〜16:30","holiday":"日曜日、月曜日","phone":"047-404-8522","hp":"-","sns":"https://www.instagram.com/lepetitcafe_chiba","tags":"#飲食,#カフェ,#スイーツ,#手作り,#ランチ,#食べる 飲む,#ベビーキッズ歓迎"},{"店舗ID":"usk","店名":"U-SUKE","紹介タイトル":"心躍るイラストの世界","スマホ紹介文":"絵本やグッズ、ワークショップを展開","address":"東京都","hours":"10時～15時","holiday":"-","phone":"-","hp":"https://u-suke-art.sakura.ne.jp/","sns":"https://www.instagram.com/usuke_works/","tags":"#イラスト,#絵本,#グッズ,#ワークショップ,#学ぶ,#ギフト"},{"店舗ID":"uchu","店名":"魚人+","紹介タイトル":"本鮪と炭火焼の店","スマホ紹介文":"美味しいお酒と旬の厳選素材を堪能","address":"千葉県船橋市高根台7-13-16","hours":"17:00～24:00","holiday":"基本日曜日","phone":"047-779-0696","hp":"-","sns":"-","tags":"#飲食,#居酒屋,#本鮪,#食べる 飲む"},{"店舗ID":"npi","店名":"Natural Portrait","紹介タイトル":"わんこと家族の写真撮影","スマホ紹介文":"自然な表情を残す出張撮影サービス","address":"千葉県船橋市","hours":"10:00〜20:00","holiday":"なし","phone":"090-1607-4046","hp":"https://hi-photo.jp/","sns":"https://www.instagram.com/dog.naturalportrait/","tags":"#家族写真,#わんこ,#撮影,#出張,#ギフト,#ベビーキッズ歓迎"},{"店舗ID":"fnt","店名":"ふなたび","紹介タイトル":"船橋の魅力を再発見","スマホ紹介文":"街の魅力を届ける地域メディア","address":"船橋市","hours":"-","holiday":"年中無休","phone":"090-5829-7010","hp":"https://www.instagram.com/funabashi._.funatabi/","sns":"https://www.instagram.com/funabashi._.funatabi/","tags":"#船橋,#地域メディア,#日常生活"},{"店舗ID":"pal","店名":"パルシステム千葉","紹介タイトル":"安心食材を玄関まで","スマホ紹介文":"暮らしに彩りをつける食材宅配サービス","address":"千葉県","hours":"9:00～20:00","holiday":"日曜日","phone":"0120-868-014","hp":"https://www.palsystem-chiba.coop/","sns":"-","tags":"#宅配,#食品,#雑貨,#ミールキット,#デリバリー,#日常生活"},{"店舗ID":"khe","店名":"K＊Heart","紹介タイトル":"アロマと癒しのエステ","スマホ紹介文":"心も体も輝けるパーソナルケア","address":"千葉県船橋市米ヶ﨑町","hours":"10:00〜19:30","holiday":"-","phone":"-","hp":"http://www.k-heart-beauty.com/","sns":"https://www.instagram.com/kheart1118","tags":"#エステ,#アロマ,#癒し,#美容 健康"},{"店舗ID":"ust","店名":"Ｕ-studio","紹介タイトル":"初心者歓迎のヨガスタジオ","スマホ紹介文":"呼吸と体、自分を整える穏やかな時間","address":"千葉県船橋市習志野台 2-6-15 2F","hours":"10:00～21:00","holiday":"不定休","phone":"090-5772-3512","hp":"https://www.u-studio.yoga/#top","sns":"https://www.instagram.com/u_studio_ekam_yoga?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==","tags":"#骨盤ヨガ,#リラックスヨガ,#赤ちゃん連れママヨガ,#椅子ヨガ,#パーソナルレッスン,#美容 健康,#学ぶ"}];
+    let currentCategory = "すべて";
+
+    async function fetchShops() {
+      const container = document.getElementById('shop-container');
+      try {
+        // 初期表示を即座に実行
+        renderShops();
+
+        console.log("Fetching from:", API_URL);
+        const res = await fetch(`${API_URL}?type=list&t=${new Date().getTime()}`);
+        if (!res.ok) throw new Error("Network response was not ok");
+        
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          allShops = data;
+          console.log("Data updated from API:", allShops);
+          renderShops();
         }
-        reader.readAsDataURL(input.files[0]);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        // エラーでも初期表示は残す（または必要ならエラー表示）
       }
     }
 
-    // LIFF初期化
-    liff.init({ liffId: LIFF_ID }).then(() => {
-      if (!liff.isLoggedIn()) { liff.login(); }
+    function renderShops() {
+      const container = document.getElementById('shop-container');
+      container.innerHTML = '';
+
+      let filtered = allShops.filter(shop => {
+        if (currentCategory === "すべて") return true;
+        if (currentCategory === "NEW") return isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
+        const cats = (shop["カテゴリ"] || shop["tags"] || "").toString();
+        return cats.includes(currentCategory);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-state">対象のショップが見つかりませんでした</div>`;
+        return;
+      }
+
+      // ソート：NEW ＞ 投稿日時順
+      filtered.sort((a,b) => (isNew(b["deliveryTimestamp"]||b["タイムスタンプ"]) - isNew(a["deliveryTimestamp"]||a["タイムスタンプ"])) || (new Date(b["タイムスタンプ"]) - new Date(a["タイムスタンプ"])));
+
+      filtered.forEach(shop => {
+        const isNewStore = isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
+        const id = shop["店舗ID"], name = shop["店名"] || "", title = shop["紹介タイトル"] || "", intro = shop["スマホ紹介文"] || "";
+        const shopImageMap = {
+          "369": "369/hero.jpeg", "mnm": "mnm/nain.png", "cko": "cko/main.jpeg", "oyk": "oyk/main.png", "akh": "akh/main.png",
+          "lpc": "lpc/main.jpeg", "usk": "usk/main.JPG", "uchu": "uchu/main.jpeg", "fnt": "fnt/main.PNG", "khe": "khe/main.png",
+          "ust": "ust/main.png", "yud": "yud/main.jpg", "yknr": "yknr/main.jpg"
+        };
+        const imgSrc = shop["メイン写真"] || `shop-list/images/shops/${shopImageMap[id] || (id + "/main.jpg")}`;
+
+        const card = document.createElement('a');
+        card.href = `shop-list/${id}.html`; card.className = "card";
+        card.innerHTML = `${isNewStore?'<div class="new-ribbon">NEW</div>':''}<div class="thumb"><img src="${imgSrc}" alt="${name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://placehold.co/200x200/orange/white?text=No+Image'"></div><div><div class="title">${name}</div><div class="meta"><span class="badge">${title}</span></div><div class="small">${intro}</div></div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function isNew(dateStr) {
+      if (!dateStr) return false;
+      return (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24) <= 10;
+    }
+
+    document.getElementById('category-chips').addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      currentCategory = chip.dataset.category;
+      renderShops();
+      window.scrollTo({ top: document.getElementById('catalog').offsetTop - 80, behavior: 'smooth' });
     });
 
-    // フォーム送信
-    document.getElementById('submissionForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
-      btn.innerText = "送信中...";
-
-      const getBase64 = (id) => {
-        const file = document.getElementById(id).files[0];
-        if (!file) return null;
-        return new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = (ev) => resolve(ev.target.result);
-          reader.readAsDataURL(file);
-        });
-      };
-
-      const data = {
-        storeId: document.getElementById('storeId').value,
-        storeName: document.getElementById('storeName').value,
-        title: document.getElementById('title').value,
-        introShort: document.getElementById('introShort').value,
-        description: document.getElementById('description').value,
-        images: [
-          await getBase64('file1'),
-          await getBase64('file2'),
-          await getBase64('file3')
-        ].filter(v => v !== null)
-      };
-
-      try {
-        const res = await fetch(GAS_URL, {
-          method: "POST",
-          body: JSON.stringify(data)
-        });
-        
-        if (res.ok) {
-          document.getElementById('form-container').style.display = 'none';
-          document.getElementById('success-screen').style.display = 'block';
-        } else {
-          alert("送信エラーが発生しました。");
-          btn.disabled = false;
-          btn.innerText = "投稿を送信する";
-        }
-      } catch (err) {
-        console.error(err);
-        alert("通信エラーが発生しました。");
-        btn.disabled = false;
-        btn.innerText = "投稿を送信する";
-      }
-    };
+    fetchShops();
   </script>
 </body>
 </html>
