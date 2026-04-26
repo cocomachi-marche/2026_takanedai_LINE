@@ -217,12 +217,13 @@
     function render(shop) {
       const name = shop["店名"] || "-";
       const title = shop["紹介タイトル"] || "";
-      const description = shop["詳細本文"] || shop["introShort"] || "";
+      const subTitle = shop["スマホ紹介文"] || "";
+      const description = shop["詳細本文"] || "";
       const tags = (shop["tags"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
 
       // 画像の取得
       const id = shop["店舗ID"];
-      const getFixedImg = (def) => `../images/shops/${id}/${def}`;
+      const getFixedImg = (def) => `images/shops/${id}/${def}`;
       
       const atmosphere1 = getFixedImg("main.png"); // 固定イメージ1
       const atmosphere2 = getFixedImg("sub.png");  // 固定イメージ2
@@ -239,22 +240,42 @@
 
         <div class="shop-head">
           <h1 class="shop-name">${name}</h1>
-          <div class="capsule-title">
-            <div class="h1-title">${title}</div>
+          
+          <!-- タイトル（カプセル） -->
+          ${title ? `
+            <div class="flex justify-center mb-4">
+              <div class="border-2 border-black rounded-full px-6 py-3 bg-white shadow-sm max-w-[95%]">
+                <div class="text-lg font-black leading-tight">${title}</div>
+              </div>
+            </div>
+          ` : ""}
+
+          <!-- サブタイトル（カプセル） -->
+          ${subTitle ? `
+            <div class="flex justify-center mb-6">
+              <div class="border border-red-400 rounded-full px-6 py-2 bg-white shadow-sm max-w-[90%]">
+                <div class="text-sm font-bold text-gray-700">${subTitle}</div>
+              </div>
+            </div>
+          ` : ""}
+        </div>
+
+        <!-- 説明本文 -->
+        <div class="description-section">
+          <div class="border-2 border-red-500 rounded-[40px] p-6 mb-8 text-sm font-medium leading-relaxed bg-white">
+            ${description || "現在、最新情報はありません。"}
           </div>
         </div>
 
-        <div class="description">${description}</div>
-
         <!-- 第2段：中段（最新のメイン投稿写真） -->
         <div class="mid-hero">
-          ${mainImg ? `<img src="${mainImg}" onerror="this.style.display='none'">` : ""}
+          ${mainImg ? `<div class="text-center mb-2 text-xs font-bold text-gray-400">メイン写真</div><img src="${mainImg}" onerror="this.style.display='none'">` : ""}
         </div>
 
         <!-- 第3段：下部（最新の追加投稿写真） -->
         <div class="sub-grid">
-          ${subImg1 ? `<img src="${subImg1}" onerror="this.style.display='none'">` : ""}
-          ${subImg2 ? `<img src="${subImg2}" onerror="this.style.display='none'">` : ""}
+          ${subImg1 ? `<div><div class="text-center mb-1 text-[10px] font-bold text-gray-400">追加写真1</div><img src="${subImg1}"></div>` : ""}
+          ${subImg2 ? `<div><div class="text-center mb-1 text-[10px] font-bold text-gray-400">追加写真2</div><img src="${subImg2}"></div>` : ""}
         </div>
 
         <!-- 基本情報リスト -->
@@ -262,14 +283,14 @@
           <div class="info-row"><div class="info-label">住所</div><div class="info-value">${shop["address"] || "-"}</div></div>
           <div class="info-row"><div class="info-label">営業時間</div><div class="info-value">${shop["hours"] || "-"}</div></div>
           <div class="info-row"><div class="info-label">定休日</div><div class="info-value">${shop["holiday"] || "-"}</div></div>
-          <div class="info-row"><div class="info-label">電話</div><div class="info-value">${shop["phone"] !== "-" ? `<a href="tel:${shop["phone"]}">${shop["phone"]}</a>` : "-"}</div></div>
-          <div class="info-row"><div class="info-label">HP</div><div class="info-value">${shop["hp"] !== "-" ? `<a href="${shop["hp"]}" target="_blank">公式ホームページ</a>` : "-"}</div></div>
-          <div class="info-row"><div class="info-label">SNS</div><div class="info-value">${shop["sns"] !== "-" ? `<a href="${shop["sns"]}" target="_blank">SNS（Instagram / FB）</a>` : "-"}</div></div>
+          <div class="info-row"><div class="info-label">電話</div><div class="info-value">${shop["phone"] && shop["phone"] !== "-" ? `<a href="tel:${shop["phone"]}">${shop["phone"]}</a>` : "-"}</div></div>
+          <div class="info-row"><div class="info-label">HP</div><div class="info-value">${shop["hp"] && shop["hp"] !== "-" ? `<a href="${shop["hp"]}" target="_blank">公式ホームページ</a>` : "-"}</div></div>
+          <div class="info-row"><div class="info-label">SNS</div><div class="info-value">${shop["sns"] && shop["sns"] !== "-" ? `<a href="${shop["sns"]}" target="_blank">Instagram</a>` : "-"}</div></div>
         </div>
 
         <ul class="pill-list">${tags}</ul>
 
-        <a class="btn-back" href="index.html#catalog">← 一覧へもどる</a>
+        <a class="btn-back" href="../index.html">← 一覧へもどる</a>
       `;
       document.title = `${name} | ココまちマルシェ`;
     }
