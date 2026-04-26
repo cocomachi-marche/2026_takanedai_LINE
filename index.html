@@ -22,7 +22,18 @@
     .chip { flex: 0 0 auto; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(0, 0, 0, .08); background: #fff; box-shadow: var(--shadow-1); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s ease; position: relative; }
     .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
     .chip[data-category="NEW"] { border: 1.5px solid #f1c40f; color: #d4ac0d; }
-    .chip[data-category="NEW"].active { background: #f1c40f; color: #000; }
+    .chip[data-category="NEW"].active { background: #f1c40f; color: #000; animation: none !important; }
+    
+    /* 点滅アニメーション */
+    @keyframes blink-gold {
+      0% { opacity: 1; box-shadow: 0 0 5px #f1c40f; }
+      50% { opacity: 0.5; box-shadow: none; border-color: transparent; }
+      100% { opacity: 1; box-shadow: 0 0 5px #f1c40f; }
+    }
+    .blinking {
+      animation: blink-gold 1.5s infinite;
+      background: #fffef0 !important;
+    }
     .cards { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
     .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-1); padding: 12px; display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: center; text-decoration: none; color: inherit; position: relative; overflow: hidden; transition: transform 0.2s; }
     .card:active { transform: scale(0.98); }
@@ -125,6 +136,15 @@
         card.innerHTML = `${isNewStore?'<div class="new-ribbon">NEW</div>':''}<div class="thumb"><img src="${imgSrc}" alt="${name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://placehold.co/200x200/orange/white?text=No+Image'"></div><div><div class="title">${name}</div><div class="meta"><span class="badge">${title}</span></div><div class="small">${intro}</div></div>`;
         container.appendChild(card);
       });
+
+      // NEWタグの点滅制御
+      const hasNew = allShops.some(s => isNew(s["deliveryTimestamp"] || s["タイムスタンプ"]));
+      const newChip = document.querySelector('.chip[data-category="NEW"]');
+      if (hasNew) {
+        newChip.classList.add('blinking');
+      } else {
+        newChip.classList.remove('blinking');
+      }
     }
 
     function isNew(dateStr) {
