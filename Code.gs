@@ -69,23 +69,26 @@ function doGet(e) {
         
         // 3. 土台に最新情報をマージ
         sheetData.forEach(row => {
-          if (!row[0]) return; // A列（日付）が空ならスキップ
-          
           let obj = {};
+          // 見出しがある場合は名前で、ない場合は列番号で推測
           headers.forEach((header, index) => {
-            if (header && index < row.length) obj[header] = row[index];
+            const key = header || (index === 0 ? "投稿日時" : index === 2 ? "店舗ID" : `col_${index}`);
+            if (index < row.length) obj[key] = row[index];
           });
           
-          const id = obj["店舗ID"];
-          if (!id || !mergedData[id]) return;
+          // 明示的なマッピング（見出しが空の場合の保険）
+          const id = obj["店舗ID"] || row[2];
+          const dateVal = obj["投稿日時"] || obj["タイムスタンプ"] || row[0];
           
-          if (row[9]) obj["deliveryTimestamp"] = row[9];
+          if (!id || !mergedData[id] || !dateVal) return;
+          
+          if (row[10]) obj["deliveryTimestamp"] = row[10]; // K列: 配信実行日時
 
-          // 見出し名「投稿日時」を使用して日付を比較
-          const currentTime = new Date(obj["投稿日時"] || obj["タイムスタンプ"]).getTime() || 0;
-          const existingTime = mergedData[id]["投稿日時"] ? new Date(mergedData[id]["投稿日時"]).getTime() : 0;
+          const currentTime = new Date(dateVal).getTime() || 0;
+          const existingTime = mergedData[id]["currentTime"] || 0;
           
           if (currentTime >= existingTime) {
+            obj["currentTime"] = currentTime;
             mergedData[id] = { ...mergedData[id], ...obj };
           }
         });
