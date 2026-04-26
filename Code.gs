@@ -73,7 +73,8 @@ function doGet(e) {
         // 3. 土台に最新情報をマージ
         sheetData.forEach(row => {
           const dateVal = row[0];
-          const id = row[2];
+          // 店舗IDの空白を除去し、確実にマスタと一致させる
+          const id = row[2] ? String(row[2]).trim() : "";
           if (!id || !mergedData[id] || !dateVal) return;
 
           const obj = {
