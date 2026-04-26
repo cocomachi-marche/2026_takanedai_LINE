@@ -33,14 +33,30 @@ function sendLineBroadcast() {
     const sheet = ss.getSheetByName((today.getMonth() + 1) + "月");
     if (sheet) {
       const values = sheet.getDataRange().getValues();
-      // J列（インデックス9）が「今日」のデータを抽出
-      targetData = values.slice(1).filter(row => {
-        const d = row[9];
-        return d instanceof Date && 
-               d.getFullYear() === today.getFullYear() && 
-               d.getMonth() === today.getMonth() && 
-               d.getDate() === today.getDate();
-      });
+      if (values.length > 0) {
+        const headers = values[0];
+        const dateColIndex = headers.indexOf("配信実行日時");
+        
+        if (dateColIndex !== -1) {
+          // 「配信実行日時」列が今日の日付であるデータを抽出
+          targetData = values.slice(1).filter(row => {
+            const d = row[dateColIndex];
+            return d instanceof Date && 
+                   d.getFullYear() === today.getFullYear() && 
+                   d.getMonth() === today.getMonth() && 
+                   d.getDate() === today.getDate();
+          });
+        } else {
+          // ヘッダーが見つからない場合は、予備として従来のJ列（インデックス9）を使用
+          targetData = values.slice(1).filter(row => {
+            const d = row[9];
+            return d instanceof Date && 
+                   d.getFullYear() === today.getFullYear() && 
+                   d.getMonth() === today.getMonth() && 
+                   d.getDate() === today.getDate();
+          });
+        }
+      }
     }
   }
 
@@ -109,4 +125,86 @@ function testDelivery() {
     UrlFetchApp.fetch(url, options);
     console.log("テスト送信完了: " + id);
   });
+}
+
+/**
+ * 昨日（25日）の配信し損ねた分を今すぐ強制配信する
+ */
+function sendEmergencyBroadcast25() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName((new Date().getMonth() + 1) + "月");
+  if (!sheet) {
+    console.log("今月のシートが見つかりません。");
+    return;
+  }
+
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const dateColIndex = headers.indexOf("配信実行日時");
+  
+  if (dateColIndex === -1) {
+    console.log("「配信実行日時」列が見つかりません。");
+    return;
+  }
+
+  // 1. 「25日」のデータだけを抽出
+  const targetData = values.slice(1).filter(row => {
+    const d = row[dateColIndex];
+    return d instanceof Date && d.getDate() === 25;
+  });
+
+  if (targetData.length === 0) {
+    console.log("昨日（25日）のアーカイブデータが見当たらないため、終了します。");
+    return;
+  }
+
+  // 2. 配信内容（文章・画像）を取得
+  const deliveryContent = getBroadcastContentFixedDate(25);
+  if (!deliveryContent.success) {
+    console.log("「テキスト」シートに25日の内容が見当たりません。");
+    return;
+  }
+  
+  const messages = [];
+  if (deliveryContent.imageUrl) {
+    messages.push({ "type": "image", "originalContentUrl": deliveryContent.imageUrl, "previewImageUrl": deliveryContent.imageUrl });
+  }
+  messages.push({ "type": "text", "text": "【再配信】\n" + deliveryContent.text });
+
+  // 3. LINEへ一斉配信
+  const LINE_ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty("LINE_ACCESS_TOKEN");
+  const url = "https://api.line.me/v2/bot/message/broadcast";
+  const options = {
+    "method": "post",
+    "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + LINE_ACCESS_TOKEN },
+    "payload": JSON.stringify({ "messages": messages })
+  };
+
+  const response = UrlFetchApp.fetch(url, options);
+  console.log("緊急配信完了: " + response.getContentText());
+}
+
+/**
+ * 特定の日付の内容を「テキスト」シートから取得する補助関数
+ */
+function getBroadcastContentFixedDate(targetDay) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("テキスト");
+  const data = sheet.getDataRange().getValues();
+  
+  for (let i = 3; i < data.length; i++) {
+    const rowDateRaw = data[i][0];
+    if (rowDateRaw instanceof Date) {
+      if (rowDateRaw.getDate() == targetDay) {
+        const text = data[i][1];
+        const imageUrl = convertDriveUrl(data[i][2]);
+        return { text, imageUrl, success: true };
+      }
+    } else if (rowDateRaw == targetDay) {
+      const text = data[i][1];
+      const imageUrl = convertDriveUrl(data[i][2]);
+      return { text, imageUrl, success: true };
+    }
+  }
+  return { success: false };
 }
