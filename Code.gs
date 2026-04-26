@@ -69,20 +69,23 @@ function doGet(e) {
         
         // 3. 土台に最新情報をマージ
         sheetData.forEach(row => {
-          let obj = {};
-          // 見出しがある場合は名前で、ない場合は列番号で推測
-          headers.forEach((header, index) => {
-            const key = header || (index === 0 ? "投稿日時" : index === 2 ? "店舗ID" : `col_${index}`);
-            if (index < row.length) obj[key] = row[index];
-          });
-          
-          // 明示的なマッピング（見出しが空の場合の保険）
-          const id = obj["店舗ID"] || row[2];
-          const dateVal = obj["投稿日時"] || obj["タイムスタンプ"] || row[0];
-          
+          const dateVal = row[0];
+          const id = row[2];
           if (!id || !mergedData[id] || !dateVal) return;
-          
-          if (row[10]) obj["deliveryTimestamp"] = row[10]; // K列: 配信実行日時
+
+          // 項目名をスプシの列順に完全固定
+          const obj = {
+            "投稿日時": dateVal,
+            "店名": row[1],
+            "店舗ID": id,
+            "紹介タイトル": row[3],
+            "スマホ紹介文": row[4],
+            "詳細本文": row[5],
+            "メイン写真": row[6],
+            "追加写真1": row[7],
+            "追加写真2": row[8],
+            "deliveryTimestamp": row[10] || ""
+          };
 
           const currentTime = new Date(dateVal).getTime() || 0;
           const existingTime = mergedData[id]["currentTime"] || 0;

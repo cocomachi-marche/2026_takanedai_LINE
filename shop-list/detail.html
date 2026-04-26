@@ -202,9 +202,9 @@
 
     function render(shop) {
       const name = shop["店名"] || "-";
-      const title = shop.col_1 || shop["紹介タイトル"] || "";
-      const subTitle = shop.col_2 || shop["スマホ紹介文"] || "";
-      const description = shop.col_3 || shop["詳細本文"] || "";
+      const title = shop["紹介タイトル"] || "";
+      const subTitle = shop["スマホ紹介文"] || "";
+      const description = shop["詳細本文"] || "";
       const tags = (shop["tags"] || shop["カテゴリ"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
 
       // 画像の取得
