@@ -117,8 +117,10 @@
         };
         const imgSrc = shop["メイン写真"] || `shop-list/images/shops/${shopImageMap[id] || (id + "/main.jpg")}`;
 
+        const isNewStore = isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
         const card = document.createElement('a');
-        card.href = `shop-list/detail.html?id=${id}`; card.className = "card";
+        card.href = isNewStore ? `shop-list/detail.html?id=${id}` : `shop-list/${id}.html`;
+        card.className = "card";
         card.innerHTML = `${isNewStore?'<div class="new-ribbon">NEW</div>':''}<div class="thumb"><img src="${imgSrc}" alt="${name}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://placehold.co/200x200/orange/white?text=No+Image'"></div><div><div class="title">${name}</div><div class="meta"><span class="badge">${title}</span></div><div class="small">${intro}</div></div>`;
         container.appendChild(card);
       });
