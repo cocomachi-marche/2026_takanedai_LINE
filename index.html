@@ -119,7 +119,6 @@
         };
         const imgSrc = shop["メイン写真"] || `shop-list/images/shops/${shopImageMap[id] || (id + "/main.jpg")}`;
 
-        const isNewStore = isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
         const card = document.createElement('a');
         card.href = isNewStore ? `shop-list/detail.html?id=${id}` : `shop-list/${id}.html`;
         card.className = "card";
