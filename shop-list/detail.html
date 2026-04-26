@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 
 <head>
@@ -11,21 +11,22 @@
   <style>
     :root {
       --content-w: 480px;
-      --mypl-orange: #e67e22;
-      --mypl-bg: #fcfcfc;
+      --brand-orange: #e67e22;
+      --bg-color: #f3f4f6;
     }
 
     body {
       font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-      background-color: #f3f4f6;
+      background-color: var(--bg-color);
       color: #333;
       margin: 0;
+      padding: 0;
     }
 
     .shop-detail {
       margin: 0 auto;
-      padding: 24px 16px 80px;
-      background: var(--mypl-bg);
+      padding: 24px 20px 80px;
+      background: #fffaf5; /* 統一した背景色 */
       min-height: 100vh;
       max-width: var(--content-w);
       box-shadow: 0 0 20px rgba(0,0,0,0.05);
@@ -43,11 +44,11 @@
       width: 100%;
       aspect-ratio: 1/1;
       object-fit: cover;
-      border-radius: 24px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    /* 中段：メイン写真（今回のおすすめ） */
+    /* 中段：メイン投稿写真 */
     .mid-hero {
       margin: 32px 0;
       text-align: center;
@@ -55,14 +56,12 @@
 
     .mid-hero img {
       width: 100%;
-      max-width: 100%;
       height: auto;
-      border-radius: 36px;
-      border: 3px solid #fbd38d;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      border-radius: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    /* 下部：追加写真（2枚並び） */
+    /* 下部：追加写真 */
     .sub-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -74,54 +73,40 @@
       width: 100%;
       aspect-ratio: 4/3;
       object-fit: cover;
-      border-radius: 20px;
-      border: 1px solid #ffd8a8;
+      border-radius: 16px;
     }
 
     /* 店名・タイトル */
     .shop-head {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .shop-name {
       font-size: 28px;
-      color: var(--mypl-orange);
-      font-weight: 900;
-      margin-bottom: 16px;
-    }
-
-    .capsule-title {
-      display: inline-block;
-      border: 2px solid #ed8936;
-      border-radius: 50px;
-      padding: 12px 24px;
-      margin-bottom: 8px;
-      background: #fff;
-      max-width: 90%;
-    }
-
-    .h1-title {
-      font-size: 18px;
+      color: var(--brand-orange);
       font-weight: 800;
-      line-height: 1.4;
+      margin-bottom: 8px;
     }
 
-    /* 説明文 */
-    .description {
+    .desc-text {
       font-size: 15px;
       line-height: 1.8;
-      color: #444;
+      color: #555;
       white-space: pre-wrap;
-      margin: 24px 0;
-      padding: 0 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    /* 区切り線（ドット） */
+    .divider {
+      border-top: 1px dotted #ffd8a8;
+      margin: 32px 0;
     }
 
     /* 基本情報リスト */
     .info-list {
-      margin: 40px 0;
-      padding: 24px 0;
-      border-top: 1px dotted #ccc;
+      margin-bottom: 40px;
     }
 
     .info-row {
@@ -132,27 +117,27 @@
     }
 
     .info-label {
-      width: 80px;
+      width: 90px;
       flex-shrink: 0;
-      color: var(--mypl-orange);
+      color: var(--brand-orange);
       font-weight: 800;
       display: flex;
       align-items: center;
     }
 
     .info-label::before {
-      content: '●';
-      font-size: 8px;
-      margin-right: 8px;
+      content: '・';
+      font-weight: bold;
+      margin-right: 4px;
     }
 
     .info-value {
       flex-grow: 1;
-      color: #333;
+      color: #444;
     }
 
     .info-value a {
-      color: var(--mypl-orange);
+      color: var(--brand-orange);
       text-decoration: underline;
     }
 
@@ -168,10 +153,10 @@
     .pill {
       background: #fff;
       border: 1px solid #fed7aa;
-      color: #ed8936;
-      padding: 6px 16px;
-      border-radius: 24px;
-      font-size: 12px;
+      color: var(--brand-orange);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 13px;
       font-weight: 700;
     }
 
@@ -180,12 +165,13 @@
       width: 100%;
       background: #fff;
       border: 1px solid #e2e8f0;
-      color: #64748b;
+      color: #475569;
       padding: 14px;
       border-radius: 40px;
       text-align: center;
       text-decoration: none;
       font-weight: 700;
+      font-size: 16px;
       transition: 0.2s;
     }
 
@@ -216,66 +202,49 @@
 
     function render(shop) {
       const name = shop["店名"] || "-";
-      const title = shop["紹介タイトル"] || "";
-      const subTitle = shop["スマホ紹介文"] || "";
-      const description = shop["詳細本文"] || "";
-      const tags = (shop["tags"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
+      const title = shop.col_1 || shop["紹介タイトル"] || "";
+      const subTitle = shop.col_2 || shop["スマホ紹介文"] || "";
+      const description = shop.col_3 || shop["詳細本文"] || "";
+      const tags = (shop["tags"] || shop["カテゴリ"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
 
       // 画像の取得
       const id = shop["店舗ID"];
       const getFixedImg = (def) => `images/shops/${id}/${def}`;
       
-      const atmosphere1 = getFixedImg("main.png"); // 固定イメージ1
-      const atmosphere2 = getFixedImg("sub.png");  // 固定イメージ2
-      const mainImg = shop["メイン写真"];      // 今回のメイン投稿 (G列)
-      const subImg1 = shop["追加写真1"];      // 今回の追加投稿1 (H列)
-      const subImg2 = shop["追加写真2"];      // 今回の追加投稿2 (I列)
+      const atmosphere1 = getFixedImg("main.jpg"); 
+      const atmosphere2 = getFixedImg("sub.png");  
+      const mainImg = shop["メイン写真"];      
+      const subImg1 = shop["追加写真1"];      
+      const subImg2 = shop["追加写真2"];      
 
       document.getElementById('app').innerHTML = `
         <!-- 第1段：最上部（店舗雰囲気写真） -->
         <div class="hero-grid">
-          <img src="${atmosphere1}" onerror="this.src='https://placehold.co/400x400?text=Atmosphere1'">
-          <img src="${atmosphere2}" onerror="this.src='https://placehold.co/400x400?text=Atmosphere2'">
+          <img src="${atmosphere1}" onerror="this.src='https://placehold.co/400x400?text=Shop+Image+1'">
+          <img src="${atmosphere2}" onerror="this.src='https://placehold.co/400x400?text=Shop+Image+2'">
         </div>
 
         <div class="shop-head">
           <h1 class="shop-name">${name}</h1>
           
-          <!-- タイトル（カプセル） -->
-          ${title ? `
-            <div class="flex justify-center mb-4">
-              <div class="border-2 border-black rounded-full px-6 py-3 bg-white shadow-sm max-w-[95%]">
-                <div class="text-lg font-black leading-tight">${title}</div>
-              </div>
-            </div>
-          ` : ""}
-
-          <!-- サブタイトル（カプセル） -->
-          ${subTitle ? `
-            <div class="flex justify-center mb-6">
-              <div class="border border-red-400 rounded-full px-6 py-2 bg-white shadow-sm max-w-[90%]">
-                <div class="text-sm font-bold text-gray-700">${subTitle}</div>
-              </div>
-            </div>
-          ` : ""}
+          <!-- タイトル(紹介タイトル) -->
+          ${title ? `<div class="text-center font-bold text-lg mb-2">${title}</div>` : ""}
+          
+          <!-- 本文 -->
+          <div class="desc-text">${description || subTitle || "現在、最新情報はありません。"}</div>
         </div>
 
-        <!-- 説明本文 -->
-        <div class="description-section">
-          <div class="border-2 border-red-500 rounded-[40px] p-6 mb-8 text-sm font-medium leading-relaxed bg-white">
-            ${description || "現在、最新情報はありません。"}
-          </div>
-        </div>
+        <div class="divider"></div>
 
         <!-- 第2段：中段（最新のメイン投稿写真） -->
         <div class="mid-hero">
-          ${mainImg ? `<div class="text-center mb-2 text-xs font-bold text-gray-400">メイン写真</div><img src="${mainImg}" onerror="this.style.display='none'">` : ""}
+          ${mainImg ? `<img src="${mainImg}" onerror="this.style.display='none'">` : ""}
         </div>
 
         <!-- 第3段：下部（最新の追加投稿写真） -->
         <div class="sub-grid">
-          ${subImg1 ? `<div><div class="text-center mb-1 text-[10px] font-bold text-gray-400">追加写真1</div><img src="${subImg1}"></div>` : ""}
-          ${subImg2 ? `<div><div class="text-center mb-1 text-[10px] font-bold text-gray-400">追加写真2</div><img src="${subImg2}"></div>` : ""}
+          ${subImg1 ? `<img src="${subImg1}">` : ""}
+          ${subImg2 ? `<img src="${subImg2}">` : ""}
         </div>
 
         <!-- 基本情報リスト -->
@@ -290,7 +259,7 @@
 
         <ul class="pill-list">${tags}</ul>
 
-        <a class="btn-back" href="../index.html">← 一覧へもどる</a>
+        <a class="btn-back" href="../index.html#catalog">← 一覧へもどる</a>
       `;
       document.title = `${name} | ココまちマルシェ`;
     }
