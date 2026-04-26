@@ -69,22 +69,24 @@
     async function fetchShops() {
       const container = document.getElementById('shop-container');
       try {
-        // 初期表示を即座に実行
+        // 初期表示を即座に実行（予備データを出す）
         renderShops();
 
-        console.log("Fetching from:", API_URL);
+        console.log("Fetching from API:", API_URL);
         const res = await fetch(`${API_URL}?type=list&t=${new Date().getTime()}`);
-        if (!res.ok) throw new Error("Network response was not ok");
+        if (!res.ok) throw new Error("APIアクセスに失敗しました");
         
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
           allShops = data;
-          console.log("Data updated from API:", allShops);
           renderShops();
         }
       } catch (err) {
-        console.error("Fetch error:", err);
-        // エラーでも初期表示は残す（または必要ならエラー表示）
+        console.warn("Fetch error (using offline data):", err);
+        // エラーでも初期表示（renderShops）は実行済みなので、そのままにする
+        if (allShops.length === 0) {
+          container.innerHTML = `<div class="empty-state">データの読み込みに失敗しました</div>`;
+        }
       }
     }
 
