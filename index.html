@@ -101,13 +101,20 @@
       }
     }
 
+    function isNew(dateStr) {
+      if (!dateStr) return false;
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return false; // 無効な日付はスキップ
+      return (new Date() - d) / (1000 * 60 * 60 * 24) <= 10;
+    }
+
     function renderShops() {
       const container = document.getElementById('shop-container');
       container.innerHTML = '';
 
       let filtered = allShops.filter(shop => {
         if (currentCategory === "すべて") return true;
-        if (currentCategory === "NEW") return isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
+        if (currentCategory === "NEW") return isNew(shop["deliveryTimestamp"] || shop["投稿日時"] || shop["タイムスタンプ"]);
         const cats = (shop["カテゴリ"] || shop["tags"] || "").toString();
         return cats.includes(currentCategory);
       });
@@ -118,10 +125,14 @@
       }
 
       // ソート：NEW ＞ 投稿日時順
-      filtered.sort((a,b) => (isNew(b["deliveryTimestamp"]||b["タイムスタンプ"]) - isNew(a["deliveryTimestamp"]||a["タイムスタンプ"])) || (new Date(b["タイムスタンプ"]) - new Date(a["タイムスタンプ"])));
+      filtered.sort((a,b) => {
+        const aNew = isNew(a["deliveryTimestamp"] || a["投稿日時"] || a["タイムスタンプ"]);
+        const bNew = isNew(b["deliveryTimestamp"] || b["投稿日時"] || b["タイムスタンプ"]);
+        return (bNew - aNew) || (new Date(b["投稿日時"] || b["タイムスタンプ"]) - new Date(a["投稿日時"] || a["タイムスタンプ"]));
+      });
 
       filtered.forEach(shop => {
-        const isNewStore = isNew(shop["deliveryTimestamp"] || shop["タイムスタンプ"]);
+        const isNewStore = isNew(shop["deliveryTimestamp"] || shop["投稿日時"] || shop["タイムスタンプ"]);
         const id = shop["店舗ID"], name = shop["店名"] || "", title = shop["紹介タイトル"] || "", intro = shop["スマホ紹介文"] || "";
         const shopImageMap = {
           "369": "369/hero.jpeg", "mnm": "mnm/nain.png", "cko": "cko/main.jpeg", "oyk": "oyk/main.png", "akh": "akh/main.png",
@@ -138,18 +149,13 @@
       });
 
       // NEWタグの点滅制御
-      const hasNew = allShops.some(s => isNew(s["deliveryTimestamp"] || s["タイムスタンプ"]));
+      const hasNew = allShops.some(s => isNew(s["deliveryTimestamp"] || s["投稿日時"] || s["タイムスタンプ"]));
       const newChip = document.querySelector('.chip[data-category="NEW"]');
       if (hasNew) {
         newChip.classList.add('blinking');
       } else {
         newChip.classList.remove('blinking');
       }
-    }
-
-    function isNew(dateStr) {
-      if (!dateStr) return false;
-      return (new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24) <= 10;
     }
 
     document.getElementById('category-chips').addEventListener('click', (e) => {

@@ -69,7 +69,7 @@ function doGet(e) {
         
         // 3. 土台に最新情報をマージ
         sheetData.forEach(row => {
-          if (!(row[0] instanceof Date)) return;
+          if (!row[0]) return; // A列（日付）が空ならスキップ
           
           let obj = {};
           headers.forEach((header, index) => {
@@ -81,10 +81,11 @@ function doGet(e) {
           
           if (row[9]) obj["deliveryTimestamp"] = row[9];
 
-          const currentTime = new Date(obj["タイムスタンプ"]).getTime();
-          const existingTime = mergedData[id]["タイムスタンプ"] ? new Date(mergedData[id]["タイムスタンプ"]).getTime() : 0;
+          // 見出し名「投稿日時」を使用して日付を比較
+          const currentTime = new Date(obj["投稿日時"] || obj["タイムスタンプ"]).getTime() || 0;
+          const existingTime = mergedData[id]["投稿日時"] ? new Date(mergedData[id]["投稿日時"]).getTime() : 0;
           
-          if (currentTime > existingTime) {
+          if (currentTime >= existingTime) {
             mergedData[id] = { ...mergedData[id], ...obj };
           }
         });
