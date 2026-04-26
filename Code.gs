@@ -67,31 +67,35 @@ function doGet(e) {
           sheetData = values.slice(1);
         }
         
+        // 見出し行から「配信実行日時」の列番号を探す
+        const deliveryIdx = headers.indexOf("配信実行日時");
+
         // 3. 土台に最新情報をマージ
         sheetData.forEach(row => {
           const dateVal = row[0];
           const id = row[2];
           if (!id || !mergedData[id] || !dateVal) return;
 
-          // 項目名をスプシの列順に完全固定
           const obj = {
             "投稿日時": dateVal,
-            "店名": row[1],
+            "店名": row[1] || "",
             "店舗ID": id,
-            "紹介タイトル": row[3],
-            "スマホ紹介文": row[4],
-            "詳細本文": row[5],
-            "メイン写真": row[6],
-            "追加写真1": row[7],
-            "追加写真2": row[8],
-            "deliveryTimestamp": row[10] || ""
+            "紹介タイトル": row[3] || "",
+            "スマホ紹介文": row[4] || "",
+            "詳細本文": row[5] || "",
+            "メイン写真": row[6] || "",
+            "追加写真1": row[7] || "",
+            "追加写真2": row[8] || "",
+            "deliveryTimestamp": (deliveryIdx !== -1) ? row[deliveryIdx] : (row[9] || row[10] || "")
           };
 
           const currentTime = new Date(dateVal).getTime() || 0;
+          const deliveryTime = new Date(obj["deliveryTimestamp"]).getTime() || 0;
           const existingTime = mergedData[id]["currentTime"] || 0;
           
-          if (currentTime >= existingTime) {
-            obj["currentTime"] = currentTime;
+          // より新しいデータ、または配信日時が入っている方を優先
+          if (currentTime >= existingTime || deliveryTime > 0) {
+            obj["currentTime"] = Math.max(currentTime, deliveryTime);
             mergedData[id] = { ...mergedData[id], ...obj };
           }
         });
