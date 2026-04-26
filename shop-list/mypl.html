@@ -11,95 +11,105 @@
   <style>
     :root {
       --content-w: 480px;
-      --mypl-orange: #e67e22;
-      --mypl-bg: #fcfcfc;
+      --brand-orange: #e67e22;
+      --bg-color: #f8f9fa;
     }
 
     body {
       font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-      background-color: #f3f4f6;
+      background-color: var(--bg-color);
       color: #333;
       margin: 0;
+      padding: 0;
     }
 
     .shop-detail {
-      margin: 0 auto;
-      padding: 24px 16px 80px;
-      background: var(--mypl-bg);
-      min-height: 100vh;
+      margin: 16px auto 80px;
+      padding: 24px 20px;
+      background: #fffaf5; /* 非常に薄いオレンジの背景 */
       max-width: var(--content-w);
-      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      border-radius: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
 
-    /* 画像レイアウト：最上部 */
+    /* 画像レイアウト：上部2枚並び */
     .hero-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
     }
 
     .hero-grid img {
       width: 100%;
       aspect-ratio: 1/1;
       object-fit: cover;
-      border-radius: 24px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 20px;
     }
 
-    /* 店名・タイトル */
-    .shop-head {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
+    /* 店名 */
     .shop-name {
+      text-align: center;
       font-size: 28px;
-      color: var(--mypl-orange);
-      font-weight: 900;
-      margin-bottom: 16px;
+      color: var(--brand-orange);
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    /* 説明文本体 */
+    .description {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    /* 点線区切り */
+    .divider {
+      border-top: 1px dotted #ffd8a8;
+      margin-bottom: 32px;
     }
 
     /* 基本情報リスト */
     .info-list {
-      margin: 40px 0;
-      padding: 24px 0;
-      border-top: 1px dotted #ccc;
+      margin-bottom: 40px;
     }
 
     .info-row {
       display: flex;
       margin-bottom: 16px;
       font-size: 14px;
-      line-height: 1.5;
+      align-items: flex-start;
     }
 
     .info-label {
-      width: 80px;
+      width: 90px;
       flex-shrink: 0;
-      color: var(--mypl-orange);
+      color: var(--brand-orange);
       font-weight: 800;
       display: flex;
       align-items: center;
     }
 
     .info-label::before {
-      content: '●';
-      font-size: 8px;
-      margin-right: 8px;
+      content: '・';
+      font-weight: bold;
+      margin-right: 4px;
     }
 
     .info-value {
       flex-grow: 1;
-      color: #333;
+      color: #444;
+      line-height: 1.5;
     }
 
     .info-value a {
-      color: var(--mypl-orange);
+      color: var(--brand-orange);
       text-decoration: underline;
     }
 
-    /* タグ */
+    /* タグ（ピル） */
     .pill-list {
       display: flex;
       flex-wrap: wrap;
@@ -111,82 +121,92 @@
     .pill {
       background: #fff;
       border: 1px solid #fed7aa;
-      color: #ed8936;
-      padding: 6px 16px;
-      border-radius: 24px;
-      font-size: 12px;
+      color: var(--brand-orange);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 13px;
       font-weight: 700;
     }
 
+    /* 戻るボタン */
     .btn-back {
       display: block;
       width: 100%;
       background: #fff;
       border: 1px solid #e2e8f0;
-      color: #64748b;
+      color: #475569;
       padding: 14px;
       border-radius: 40px;
       text-align: center;
       text-decoration: none;
       font-weight: 700;
-      transition: 0.2s;
+      font-size: 16px;
+      transition: background 0.2s;
     }
 
-    .btn-back:hover { background: #f8fafc; }
+    .btn-back:hover {
+      background: #f8fafc;
+    }
   </style>
 </head>
 
 <body>
-  <main class="shop-detail">
-    <!-- 第1段：最上部（店舗雰囲気写真） -->
+  <div class="shop-detail">
+    <!-- 上部画像 -->
     <div class="hero-grid">
-      <img src="images/shops/mypl/main.jpg" onerror="this.src='https://placehold.co/400x400?text=Atmosphere1'">
-      <img src="images/shops/mypl/sub.png" onerror="this.src='https://placehold.co/400x400?text=Atmosphere2'">
+      <img src="images/shops/mypl/main.jpg" onerror="this.src='https://placehold.co/400x400?text=Shop+Image+1'">
+      <img src="images/shops/mypl/sub.png" onerror="this.src='https://placehold.co/400x400?text=Shop+Image+2'">
     </div>
 
-    <div class="shop-head">
-      <h1 class="shop-name">まいぷれ船橋</h1>
-      
-      <!-- タイトル（カプセル） -->
-      <div class="flex justify-center mb-4">
-        <div class="border-2 border-black rounded-full px-6 py-3 bg-white shadow-sm max-w-[95%]">
-          <div class="text-lg font-black leading-tight">地域情報満載</div>
-        </div>
-      </div>
+    <!-- 店名 -->
+    <h1 class="shop-name">まいぷれ船橋</h1>
 
-      <!-- サブタイトル（カプセル） -->
-      <div class="flex justify-center mb-6">
-        <div class="border border-red-400 rounded-full px-6 py-2 bg-white shadow-sm max-w-[90%]">
-          <div class="text-sm font-bold text-gray-700">船橋の今を届ける地域情報サイト</div>
-        </div>
-      </div>
-    </div>
+    <!-- 説明文 -->
+    <p class="description">
+      船橋の名店やイベントを発見！毎日の暮らしが少し楽しくなる地域情報サイトです。地元密着25年のノウハウを活かし、船橋のディープな魅力や役立つ情報を毎日配信中。あなたの街がもっと好きになるきっかけを届けます。
+    </p>
 
-    <!-- 説明本文 -->
-    <div class="description-section">
-      <div class="border-2 border-red-500 rounded-[40px] p-6 mb-8 text-sm font-medium leading-relaxed bg-white">
-        船橋の名店やイベントを発見！毎日の暮らしが少し楽しくなる地域情報サイトです。地元密着25年のノウハウを活かし、船橋のディープな魅力や役立つ情報を毎日配信中。あなたの街がもっと好きになるきっかけを届けます。
-      </div>
-    </div>
+    <!-- 区切り線 -->
+    <div class="divider"></div>
 
-    <!-- 基本情報リスト -->
+    <!-- 基本情報 -->
     <div class="info-list">
-      <div class="info-row"><div class="info-label">住所</div><div class="info-value">船橋市西船4-19-3 西船成島ビル8階</div></div>
-      <div class="info-row"><div class="info-label">営業時間</div><div class="info-value">9:00～18:00</div></div>
-      <div class="info-row"><div class="info-label">定休日</div><div class="info-value">土曜日、日曜日、祝日</div></div>
-      <div class="info-row"><div class="info-label">電話</div><div class="info-value"><a href="tel:0474950521">047-495-0521</a></div></div>
-      <div class="info-row"><div class="info-label">HP</div><div class="info-value"><a href="https://funabashi.mypl.net/" target="_blank">公式ホームページ</a></div></div>
-      <div class="info-row"><div class="info-label">SNS</div><div class="info-value"><a href="https://www.instagram.com/mypl_funabashi/" target="_blank">Instagram</a></div></div>
+      <div class="info-row">
+        <div class="info-label">住所</div>
+        <div class="info-value">船橋市西船4-19-3 西船成島ビル8階</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">営業時間</div>
+        <div class="info-value">9:00～18:00</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">定休日</div>
+        <div class="info-value">土曜日、日曜日、祝日</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">電話</div>
+        <div class="info-value"><a href="tel:0474950521">047-495-0521</a></div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">HP</div>
+        <div class="info-value"><a href="https://funabashi.mypl.net/" target="_blank">公式ホームページ</a></div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">SNS</div>
+        <div class="info-value"><a href="https://www.instagram.com/mypl_funabashi/" target="_blank">Instagram</a></div>
+      </div>
     </div>
 
-    <ul class="pill-list">
-      <li class="pill">#メディア</li>
-      <li class="pill">#広告</li>
-      <li class="pill">#地域情報</li>
-    </ul>
+    <!-- タグ -->
+    <div class="pill-list">
+      <span class="pill">#メディア</span>
+      <span class="pill">#広告</span>
+      <span class="pill">#地域情報</span>
+    </div>
 
+    <!-- 戻るボタン -->
     <a class="btn-back" href="../index.html#catalog">← 一覧へもどる</a>
-  </main>
+  </div>
 </body>
 
 </html>
