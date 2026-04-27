@@ -185,7 +185,7 @@
   </main>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx0RHc10pEdn7Hj8orrju5Igpe-HLoYvUgZ8m1hzyzUZBDOP-Xqh7PjDyTKtKmioLBaqg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzLxq0jgfrgMeEjHE8cx8Lsf4oX89FdA64jl1tXI52KgtpDu0fj8o6GX4JcwYPH-J8/exec";
 
     async function init() {
       const id = new URLSearchParams(window.location.search).get('id');
@@ -202,9 +202,9 @@
 
     function render(shop) {
       const name = shop["店名"] || "-";
-      const title = shop["紹介タイトル"] || "";
-      const subTitle = shop["スマホ紹介文"] || "";
-      const description = shop["詳細本文"] || "";
+      const title = shop["メインタイトル"] || "";
+      const subTitle = shop["サブタイトル"] || "";
+      const description = shop["詳細、本文"] || "";
       const tags = (shop["tags"] || shop["カテゴリ"] || "").split(',').filter(v => v).map(t => `<li class="pill">${t.trim()}</li>`).join('');
 
       // 画像の取得

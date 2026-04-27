@@ -10,25 +10,25 @@ const FOLDER_ID = "1Whxg3bzeXV0t0RFIJaXfpagKxTKyoeOP"; // ヒデさん指定の�
  * 既存の店舗固定データ
  */
 const FIXED_DATA = {
-  "369": { "店名": "洋食堂バル369", "紹介タイトル": "寄り道したくなるお店", "スマホ紹介文": "高根公団駅近のアットホームな飲食店", address: "千葉県船橋市高根台1-8-2", hours: "11:00〜14:30、18:00〜23:00", holiday: "月曜日、木曜日、不定休", phone: "047-407-1369", hp: "https://yoshokudobar369.owst.jp/", sns: "https://www.instagram.com/yoshokudobar_369/", tags: "#飲食,#ランチ,#ディナー,#お酒,#バル,#レストラン,#お食事,#日本酒,#食べる 飲む" },
-  "mnm": { "店名": "はんどめいど　みんみ", "紹介タイトル": "編みぐるみ販売", "スマホ紹介文": "かぎ針編みで制作した編みぐるみ販売", address: "-", hours: "-", holiday: "-", phone: "-", hp: "-", sns: "https://www.instagram.com/handmade_minmi", tags: "#ハンドメイド,#編み物,#編みぐるみ,#日常生活,#ギフト" },
-  "szk": { "店名": "スズキオート京葉株式会社", "紹介タイトル": "創業55年地域密着企業", "スマホ紹介文": "地域密着の車屋さんです。みんな相談に来てね！", address: "千葉県船橋市芝山2-8-1", hours: "9:00〜18:00", holiday: "第2第4月曜日、年末年始", phone: "047-463-2101", hp: "https://suzuki-auto-keiyo.jp/", sns: "https://www.instagram.com/suzuki_auto_keiyo", tags: "#車,#整備,#地域密着,#日常生活,#お悩み解決" },
-  "knr": { "店名": "Cafe Kinari", "紹介タイトル": "静かなご褒美 食べる 飲む", "スマホ紹介文": "心ほどける小さなカフェ", address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#バインミー,#アサイーボウル,#コーヒー,#カフェ,#耳ツボジュエリー,#食べる 飲む,#美容 健康" },
-  "oyk": { "店名": "お好み焼き　きんいろ", "紹介タイトル": "自家製出汁たっぷり", "スマホ紹介文": "たっぷりキャベツのふわっふわお好み焼き", address: "千葉県船橋市大穴南1-40-12", hours: "12:00~15:00、17:00~22:00", holiday: "火曜日", phone: "047-404-3820", hp: "-", sns: "https://www.instagram.com/okonomiyaki_kin.iro", tags: "#飲食,#お好み焼き,#滝不動,#昼飲み,#自家製出出し,#食べる 飲む" },
-  "tmp": { "店名": "田中美穂ピアノ教室", "紹介タイトル": "みんな音楽家", "スマホ紹介文": "リズム遊びをしながら楽器に触れてみよう", address: "船橋市七林町114-61", hours: "14時〜20時", holiday: "-", phone: "090-3067-5899", hp: "https://www.miho-piano.site/", sns: "https://www.facebook.com/田中美穂ピアノ教室", tags: "#教育,#ピアノ,#ヴァイオリン,#学ぶ,#ベビーキッズ歓迎" },
-  "yknr": { "店名": "耳つぼジュエリー Kinari", "紹介タイトル": "ピアス感覚で健康に", "スマホ紹介文": "耳つぼに貼るだけで体感できます。", address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#眼精疲労,#ダイエット,#肩こり腰痛,#リフトアップ,#健康,#美容,#耳ツボジュエリー,#美容 健康,#お悩み解決" },
-  "mypl": { "店名": "まいぷれ船橋", "紹介タイトル": "地域情報満載", "スマホ紹介文": "船橋の今を届ける地域情報サイト", address: "船橋市西船4-19-3 西船成島ビル8階", hours: "9:00～18:00", holiday: "土曜日、日曜日、祝日", phone: "047-495-0521", hp: "https://funabashi.mypl.net/", sns: "https://www.instagram.com/mypl_funabashi/", tags: "#メディア,#広告,#地域情報,#日常生活" },
-  "mld": { "店名": "えむらぼデザイン", "紹介タイトル": "想いをカタチに", "スマホ紹介文": "船橋の小さなデザイン事務所", address: "-", hours: "5:00〜22:00", holiday: "-", phone: "090-4606-3061", hp: "https://www.mmihodesign.com/", sns: "https://www.instagram.com/funabashi_designmlabo", tags: "#クリエイティブ,#SNS,#デザイン,#お悩み解決" },
-  "akh": { "店名": "旭化成ホームズ株式会社", "紹介タイトル": "長く、共に歩む住まい", "スマホ紹介文": "住宅展示場で理想の暮らしを体験", address: "千葉県船橋市本町1-3-1 船橋フェイスビル12階", hours: "9:00～18:00", holiday: "水曜、日曜、祝日", phone: "080-5643-1908", hp: "https://www.asahi-kasei.co.jp/hebel/", sns: "https://www.instagram.com/hebelhaus_official/", tags: "#住宅,#リフォーム,#賃貸経営,#お悩み解決,#バリアフリー" },
-  "yud": { "店名": "稀石浴　温どこ", "紹介タイトル": "芯から温まる岩盤浴", "スマホ紹介文": "心も体もリラックスできる癒しの空間", address: "千葉県船橋市南三咲3-15-5", hours: "10:00〜20:00", holiday: "年末年始", phone: "047-494-9989", hp: "https://www.ondoko.com", sns: "-", tags: "#岩盤浴,#健康,#美容,#美容 健康" },
-  "lpc": { "店名": "ル・プチ・カフェ", "紹介タイトル": "手作りスイーツとランチ", "スマホ紹介文": "心地よい時間が流れる隠れ家カフェ", address: "千葉県船橋市高根台6-8-1", hours: "11:00〜16:30", holiday: "日曜日、月曜日", phone: "047-404-8522", hp: "-", sns: "https://www.instagram.com/lepetitcafe_chiba", tags: "#飲食,#カフェ,#スイーツ,#手作り,#ランチ,#食べる 飲む,#ベビーキッズ歓迎" },
-  "usk": { "店名": "U-SUKE", "紹介タイトル": "心躍るイラストの世界", "スマホ紹介文": "絵本やグッズ、ワークショップを展開", address: "東京都", hours: "10時～15時", holiday: "-", phone: "-", hp: "https://u-suke-art.sakura.ne.jp/", sns: "https://www.instagram.com/usuke_works/", tags: "#イラスト,#絵本,#グッズ,#ワークショップ,#学ぶ,#ギフト" },
-  "uchu": { "店名": "魚人+", "紹介タイトル": "本鮪と炭火焼の店", "スマホ紹介文": "美味しいお酒と旬の厳選素材を堪能", address: "千葉県船橋市高根台7-13-16", hours: "17:00～24:00", holiday: "基本日曜日", phone: "047-779-0696", hp: "-", sns: "-", tags: "#飲食,#居酒屋,#本鮪,#食べる 飲む" },
-  "npi": { "店名": "Natural Portrait", "紹介タイトル": "わんこと家族の写真撮影", "スマホ紹介文": "自然な表情を残す出張撮影サービス", address: "千葉県船橋市", hours: "10:00〜20:00", holiday: "なし", phone: "090-1607-4046", hp: "https://hi-photo.jp/", sns: "https://www.instagram.com/dog.naturalportrait/", tags: "#家族写真,#わんこ,#撮影,#出張,#ギフト,#ベビーキッズ歓迎" },
-  "fnt": { "店名": "ふなたび", "紹介タイトル": "船橋の魅力を再発見", "スマホ紹介文": "街の魅力を届ける地域メディア", address: "船橋市", hours: "-", holiday: "年中無休", phone: "090-5829-7010", hp: "https://www.instagram.com/funabashi._.funatabi/", sns: "https://www.instagram.com/funabashi._.funatabi/", tags: "#船橋,#地域メディア,#日常生活" },
-  "pal": { "店名": "パルシステム千葉", "紹介タイトル": "安心食材を玄関まで", "スマホ紹介文": "暮らしに彩りを添える食材宅配サービス", address: "千葉県", hours: "9:00～20:00", holiday: "日曜日", phone: "0120-868-014", hp: "https://www.palsystem-chiba.coop/", sns: "-", tags: "#宅配,#食品,#雑貨,#ミールキット,#デリバリー,#日常生活" },
-  "khe": { "店名": "K＊Heart", "紹介タイトル": "アロマと癒しのエステ", "スマホ紹介文": "心も体も輝けるパーソナルケア", address: "千葉県船橋市米ヶ﨑町", hours: "10:00〜19:30", holiday: "-", phone: "-", hp: "http://www.k-heart-beauty.com/", sns: "https://www.instagram.com/kheart1118", tags: "#エステ,#アロマ,#癒し,#美容 健康" },
-  "ust": { "店名": "Ｕ-studio", "紹介タイトル": "初心者歓迎のヨガスタジオ", "スマホ紹介文": "呼吸と体、自分を整える穏やかな時間", address: "千葉県船橋市習志野台 2-6-15 2F", hours: "10:00～21:00", holiday: "不定休", phone: "090-5772-3512", hp: "https://www.u-studio.yoga/#top", sns: "https://www.instagram.com/u_studio_ekam_yoga?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", tags: "#骨盤ヨガ,#リラックスヨガ,#赤ちゃん連れママヨガ,#椅子ヨガ,#パーソナルレッスン,#美容 健康,#学ぶ" }
+  "369": { "店名": "洋食堂バル369", "メインタイトル": "寄り道したくなるお店", "サブタイトル": "高根公団駅近のアットホームな飲食店", address: "千葉県船橋市高根台1-8-2", hours: "11:00〜14:30、18:00〜23:00", holiday: "月曜日、木曜日、不定休", phone: "047-407-1369", hp: "https://yoshokudobar369.owst.jp/", sns: "https://www.instagram.com/yoshokudobar_369/", tags: "#飲食,#ランチ,#ディナー,#お酒,#バル,#レストラン,#お食事,#日本酒,#食べる 飲む" },
+  "mnm": { "店名": "はんどめいど　みんみ", "メインタイトル": "編みぐるみ販売", "サブタイトル": "かぎ針編みで制作した編みぐるみ販売", address: "-", hours: "-", holiday: "-", phone: "-", hp: "-", sns: "https://www.instagram.com/handmade_minmi", tags: "#ハンドメイド,#編み物,#編みぐるみ,#日常生活,#ギフト" },
+  "szk": { "店名": "スズキオート京葉株式会社", "メインタイトル": "創業55年地域密着企業", "サブタイトル": "地域密着の車屋さんです。みんな相談に来てね！", address: "千葉県船橋市芝山2-8-1", hours: "9:00〜18:00", holiday: "第2第4月曜日、年末年始", phone: "047-463-2101", hp: "https://suzuki-auto-keiyo.jp/", sns: "https://www.instagram.com/suzuki_auto_keiyo", tags: "#車,#整備,#地域密着,#日常生活,#お悩み解決" },
+  "knr": { "店名": "Cafe Kinari", "メインタイトル": "静かなご褒美 食べる 飲む", "サブタイトル": "心ほどける小さなカフェ", address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#バインミー,#アサイーボウル,#コーヒー,#カフェ,#耳ツボジュエリー,#食べる 飲む,#美容 健康" },
+  "oyk": { "店名": "お好み焼き　きんいろ", "メインタイトル": "自家製出汁たっぷり", "サブタイトル": "たっぷりキャベツのふわっふわお好み焼き", address: "千葉県船橋市大穴南1-40-12", hours: "12:00~15:00、17:00~22:00", holiday: "火曜日", phone: "047-404-3820", hp: "-", sns: "https://www.instagram.com/okonomiyaki_kin.iro", tags: "#飲食,#お好み焼き,#滝不動,#昼飲み,#自家製出出し,#食べる 飲む" },
+  "tmp": { "店名": "田中美穂ピアノ教室", "メインタイトル": "みんな音楽家", "サブタイトル": "リズム遊びをしながら楽器に触れてみよう", address: "船橋市七林町114-61", hours: "14時〜20時", holiday: "-", phone: "090-3067-5899", hp: "https://www.miho-piano.site/", sns: "https://www.facebook.com/田中美穂ピアノ教室", tags: "#教育,#ピアノ,#ヴァイオリン,#学ぶ,#ベビーキッズ歓迎" },
+  "yknr": { "店名": "耳つぼジュエリー Kinari", "メインタイトル": "ピアス感覚で健康に", "サブタイトル": "耳つぼに貼るだけで体感できます。", address: "千葉県船橋市高根台6-2-21-2F", hours: "11:00〜16:00", holiday: "水曜日、土曜日", phone: "-", hp: "-", sns: "https://www.instagram.com/cafe_kinari", tags: "#眼精疲労,#ダイエット,#肩こり腰痛,#リフトアップ,#健康,#美容,#耳ツボジュエリー,#美容 健康,#お悩み解決" },
+  "mypl": { "店名": "まいぷれ船橋", "メインタイトル": "地域情報満載", "サブタイトル": "船橋の今を届ける地域情報サイト", address: "船橋市西船4-19-3 西船成島ビル8階", hours: "9:00～18:00", holiday: "土曜日、日曜日、祝日", phone: "047-495-0521", hp: "https://funabashi.mypl.net/", sns: "https://www.instagram.com/mypl_funabashi/", tags: "#メディア,#広告,#地域情報,#日常生活" },
+  "mld": { "店名": "えむらぼデザイン", "メインタイトル": "想いをカタチに", "サブタイトル": "船橋の小さなデザイン事務所", address: "-", hours: "5:00〜22:00", holiday: "-", phone: "090-4606-3061", hp: "https://www.mmihodesign.com/", sns: "https://www.instagram.com/funabashi_designmlabo", tags: "#クリエイティブ,#SNS,#デザイン,#お悩み解決" },
+  "akh": { "店名": "旭化成ホームズ株式会社", "メインタイトル": "長く、共に歩む住まい", "サブタイトル": "住宅展示場で理想の暮らしを体験", address: "千葉県船橋市本町1-3-1 船橋フェイスビル12階", hours: "9:00～18:00", holiday: "水曜、日曜、祝日", phone: "080-5643-1908", hp: "https://www.asahi-kasei.co.jp/hebel/", sns: "https://www.instagram.com/hebelhaus_official/", tags: "#住宅,#リフォーム,#賃貸経営,#お悩み解決,#バリアフリー" },
+  "yud": { "店名": "稀石浴　温どこ", "メインタイトル": "芯から温まる岩盤浴", "サブタイトル": "心も体もリラックスできる癒しの空間", address: "千葉県船橋市南三咲3-15-5", hours: "10:00〜20:00", holiday: "年末年始", phone: "047-494-9989", hp: "https://www.ondoko.com", sns: "-", tags: "#岩盤浴,#健康,#美容,#美容 健康" },
+  "lpc": { "店名": "ル・プチ・カフェ", "メインタイトル": "手作りスイーツとランチ", "サブタイトル": "心地よい時間が流れる隠れ家カフェ", address: "千葉県船橋市高根台6-8-1", hours: "11:00〜16:30", holiday: "日曜日、月曜日", phone: "047-404-8522", hp: "-", sns: "https://www.instagram.com/lepetitcafe_chiba", tags: "#飲食,#カフェ,#スイーツ,#手作り,#ランチ,#食べる 飲む,#ベビーキッズ歓迎" },
+  "usk": { "店名": "U-SUKE", "メインタイトル": "心躍るイラストの世界", "サブタイトル": "絵本やグッズ、ワークショップを展開", address: "東京都", hours: "10時～15時", holiday: "-", phone: "-", hp: "https://u-suke-art.sakura.ne.jp/", sns: "https://www.instagram.com/usuke_works/", tags: "#イラスト,#絵本,#グッズ,#ワークショップ,#学ぶ,#ギフト" },
+  "uchu": { "店名": "魚人+", "メインタイトル": "本鮪と炭火焼の店", "サブタイトル": "美味しいお酒と旬の厳選素材を堪能", address: "千葉県船橋市高根台7-13-16", hours: "17:00～24:00", holiday: "基本日曜日", phone: "047-779-0696", hp: "-", sns: "-", tags: "#飲食,#居酒屋,#本鮪,#食べる 飲む" },
+  "npi": { "店名": "Natural Portrait", "メインタイトル": "わんこと家族の写真撮影", "サブタイトル": "自然な表情を残す出張撮影サービス", address: "千葉県船橋市", hours: "10:00〜20:00", holiday: "なし", phone: "090-1607-4046", hp: "https://hi-photo.jp/", sns: "https://www.instagram.com/dog.naturalportrait/", tags: "#家族写真,#わんこ,#撮影,#出張,#ギフト,#ベビーキッズ歓迎" },
+  "fnt": { "店名": "ふなたび", "メインタイトル": "船橋の魅力を再発見", "サブタイトル": "街の魅力を届ける地域メディア", address: "船橋市", hours: "-", holiday: "年中無休", phone: "090-5829-7010", hp: "https://www.instagram.com/funabashi._.funatabi/", sns: "https://www.instagram.com/funabashi._.funatabi/", tags: "#船橋,#地域メディア,#日常生活" },
+  "pal": { "店名": "パルシステム千葉", "メインタイトル": "安心食材を玄関まで", "サブタイトル": "暮らしに彩りを添える食材宅配サービス", address: "千葉県", hours: "9:00～20:00", holiday: "日曜日", phone: "0120-868-014", hp: "https://www.palsystem-chiba.coop/", sns: "-", tags: "#宅配,#食品,#雑貨,#ミールキット,#デリバリー,#日常生活" },
+  "khe": { "店名": "K＊Heart", "メインタイトル": "アロマと癒しのエステ", "サブタイトル": "心も体も輝けるパーソナルケア", address: "千葉県船橋市米ヶ﨑町", hours: "10:00〜19:30", holiday: "-", phone: "-", hp: "http://www.k-heart-beauty.com/", sns: "https://www.instagram.com/kheart1118", tags: "#エステ,#アロマ,#癒し,#美容 健康" },
+  "ust": { "店名": "Ｕ-studio", "メインタイトル": "初心者歓迎のヨガスタジオ", "サブタイトル": "呼吸と体、自分を整える穏やかな時間", address: "千葉県船橋市習志野台 2-6-15 2F", hours: "10:00～21:00", holiday: "不定休", phone: "090-5772-3512", hp: "https://www.u-studio.yoga/#top", sns: "https://www.instagram.com/u_studio_ekam_yoga?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", tags: "#骨盤ヨガ,#リラックスヨガ,#赤ちゃん連れママヨガ,#椅子ヨガ,#パーソナルレッスン,#美容 健康,#学ぶ" }
 };
 
 /**
@@ -81,9 +81,9 @@ function doGet(e) {
             "投稿日時": dateVal,
             "店名": row[1] || "",
             "店舗ID": id,
-            "紹介タイトル": row[3] || "",
-            "スマホ紹介文": row[4] || "",
-            "詳細本文": row[5] || "",
+            "メインタイトル": row[3] || "",
+            "サブタイトル": row[4] || "",
+            "詳細、本文": row[5] || "",
             "メイン写真": row[6] || "",
             "追加写真1": row[7] || "",
             "追加写真2": row[8] || "",
@@ -182,9 +182,9 @@ function doPost(e) {
       new Date(),        // タイムスタンプ (A)
       storeName,         // 店名 (B)
       fixedStoreId,      // 店舗ID (C)
-      data.title,        // 紹介タイトル (D)
-      data.introShort,   // スマホ紹介文 (E)
-      data.description,  // 詳細本文 (F)
+      data.title,        // メインタイトル (D)
+      data.introShort,   // サブタイトル (E)
+      data.description,  // 詳細、本文 (F)
       imageUrls[0] || "", // メイン写真 (G)
       imageUrls[1] || "", // 追加写真1 (H)
       imageUrls[2] || ""  // 追加写真2 (I)

@@ -104,8 +104,9 @@ function convertDriveUrl(url) {
   const idMatch = trimmedUrl.match(/[-\w]{25,}/);
   if (idMatch) {
     const fileId = idMatch[0];
-    // LINEで表示されやすいサムネイル表示形式（w1000 = 幅1000px）を試す
-    return "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1000";
+    // LINEで表示させるためのGoogle Drive直リンク（※ファイル容量が大きいとウイルススキャン警告画面になり失敗する場合があります）
+    // また、必ずGoogleドライブ側で「リンクを知っている全員が閲覧可」に設定されている必要があります。
+    return "https://drive.google.com/uc?export=download&id=" + fileId;
   }
   return trimmedUrl;
 }
